@@ -1,0 +1,18 @@
+html{
+  height:100%;
+  width: 100%;
+  margin:0;
+  padding:0;
+  background-color: blue;
+}
+
+body {
+  background-color:#000;
+  color:#fff;
+  font-family:helvetica;
+  padding:0px;
+  margin:0 auto;
+  height:95%;
+  width: 95%;
+  font-size:14px;
+}
