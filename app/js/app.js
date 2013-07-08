@@ -199,53 +199,58 @@ jQuery(document).ready ( function () {
 
   function drawResources () {
 
+    var x = ((Math.sin( planetPosition ) * (200)) + canvasWidth / 2) ;
+    var y = ((Math.cos( planetPosition ) * (200)) + canvasHeight);
+
     //gold
     context.beginPath();
     context.fillStyle="yellow";
-    context.fillRect(canvasWidth / 2,400,5,5);
+    context.fillRect(x,y -15,5,5);
     context.fill();
 
     context.beginPath();
     context.fillStyle="yellow";
-    context.fillRect(canvasWidth / 2 + 5,410,3,3);
+    context.fillRect(x + 5,y,3,3);
     context.fill();
 
     context.beginPath();
     context.fillStyle="yellow";
-    context.fillRect(canvasWidth / 2 - 15,418,2,2);
+    context.fillRect(x - 15,y,2,2);
     context.fill();
 
     context.beginPath();
     context.fillStyle="yellow";
-    context.fillRect(canvasWidth / 2 -6,410,5,5);
+    context.fillRect(x -6,y - 6,5,5);
     context.fill();
 
+    x = ((Math.sin( planetPosition ) * (270)) + canvasWidth / 2) ;
+    y = ((Math.cos( planetPosition ) * (270)) + canvasHeight);
     //coal
     context.beginPath();
     context.fillStyle="black";
-    context.fillRect(canvasWidth / 2,300,5,5);
+    context.fillRect(x,y - 5,5,5);
     context.fill();
 
     context.beginPath();
     context.fillStyle="black";
-    context.fillRect(canvasWidth / 2 - 15,310,3,3);
+    context.fillRect(x - 15,y ,3,3);
     context.fill();
 
     context.beginPath();
     context.fillStyle="black";
-    context.fillRect(canvasWidth / 2 - 15,318,2,2);
+    context.fillRect(x - 15,y - 8,2,2);
     context.fill();
 
     context.beginPath();
     context.fillStyle="black";
-    context.fillRect(canvasWidth / 2 -6,310,5,5);
+    context.fillRect(x -6,y - 6,5,5);
     context.fill();
   }
 
   function drawFactory () {
 
-    var y = Math.sin( planetPosition ) * (360) + canvasWidth / 2;
-    var x = Math.cos( planetPosition ) * (360) + canvasHeight;
+    var y = (Math.sin( planetPosition ) * (360)) + canvasWidth / 2 - 18;
+    var x = (Math.cos( planetPosition ) * (360)) + canvasHeight ;
     var r = Math.PI / planetPosition;
     context.save();
     
@@ -253,8 +258,6 @@ jQuery(document).ready ( function () {
     context.beginPath();
     
     context.fillStyle="#FF0000";
-    
-    
     
     context.fillRect(y,x,5,18);
 
