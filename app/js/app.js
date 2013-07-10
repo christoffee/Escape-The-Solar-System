@@ -20,6 +20,7 @@ jQuery(document).ready ( function () {
   var canvasHeight;
   var canvasWidth;
   var planetPosition = 3;
+  var gameTime = 12345678;
 
   init();
 
@@ -64,12 +65,14 @@ jQuery(document).ready ( function () {
   function render() {
     if(context){
       context.clearRect(0,0,canvasWidth,canvasHeight);
+
       drawBackground();
       drawPlanet();
       drawResources();
       drawClouds();
       drawFactory();
       drawDashboard();
+      console.log(gameTime);
     }
   }
   
@@ -158,7 +161,7 @@ jQuery(document).ready ( function () {
         var cloudSize = cloudsArr[arr][0],
             cloudSpeed = cloudsArr[arr][1],
             antiClockwise = cloudsArr[arr][2];
-        var time = new Date().getTime() * cloudSpeed;
+        var time = (gameTime * cloudSpeed) + planetPosition;
         
         if(antiClockwise){
         	time = -time;
@@ -280,26 +283,16 @@ jQuery(document).ready ( function () {
 
     var y = (Math.sin( planetPosition ) * (canvasWidth / 2.15)) + canvasWidth / 2;
     var x = (Math.cos( planetPosition ) * (canvasWidth / 2.15)) + canvasHeight ;
-    var r = Math.PI / planetPosition;
-    
-    
+    var r = (Math.PI / (planetPosition));
 
-    context.beginPath();
-    
-    context.fillStyle="#FF0000";
-    context.fill();
     context.save();
-    context.rotate(r);
-    context.restore();
-    context.fillRect(y,x,5,18);
 
-    context.fill();
-
-    context.beginPath();
     context.fillStyle="#FF0000";
+    context.translate(25,5);
+    context.rotate(r);
     context.fillRect(y,x +5,50,15);
-    
 
+    context.restore();
   }
 
   function drawDashboard () {
