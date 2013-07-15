@@ -283,16 +283,16 @@ jQuery(document).ready ( function () {
 
     var y = (Math.sin( planetPosition ) * (canvasWidth / 2.15)) + canvasWidth / 2;
     var x = (Math.cos( planetPosition ) * (canvasWidth / 2.15)) + canvasHeight ;
-    var r = (Math.PI / (planetPosition));
+    //var r = (Math.PI / (planetPosition));
 
-    context.save();
-
+    //context.save();
+    context.beginPath();
     context.fillStyle="#FF0000";
-    context.translate(25,5);
-    context.rotate(r);
+    //context.translate(25,5);
+    //context.rotate(r);
     context.fillRect(y,x +5,50,15);
-
-    context.restore();
+context.fill();
+    //context.restore();
   }
 
   function drawDashboard () {
