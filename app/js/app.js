@@ -71,6 +71,8 @@ jQuery(document).ready ( function () {
       drawResources();
       drawClouds();
       drawFactory();
+      drawLab();
+      drawFlats();
       drawDashboard();
       console.log(gameTime);
     }
@@ -336,9 +338,48 @@ jQuery(document).ready ( function () {
     context.beginPath();
     context.translate(x,y);
     context.rotate(r);
+    //factory
     context.rect(-25,-5,50,10);
     context.rect(-25,-5,5,30);
+    //mine
+    context.rect(-5,-50,2,50);
+    context.rect(-25,-50,70,2);
+    context.rect(-35,-50,30,2);
+    context.rect(-15,-150,2,100);
+    context.rect(-12,-150,20,2);
     context.fillStyle="#FF0000";
+    context.fill();
+    context.restore();
+  }
+
+  function drawLab () {
+    var x = (Math.sin( planetPosition +5) * (canvasWidth / 2.18)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition +5) * (canvasWidth / 2.18)) + canvasHeight ;
+    var r = -(planetPosition*57) * Math.PI/180;
+    
+    context.save();
+    context.beginPath();
+    context.translate(x,y);
+    context.rotate(r-5);
+    context.rect(-25,-10,50,20);
+    context.fillStyle="blue";
+    context.fill();
+    context.restore();
+  }
+
+  function drawFlats () {
+    var x = (Math.sin( planetPosition +2) * (canvasWidth / 2.18)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition +2) * (canvasWidth / 2.18)) + canvasHeight ;
+    var r = -(planetPosition*57) * Math.PI/180;
+    
+    context.save();
+    context.beginPath();
+    context.translate(x,y);
+    context.rotate(r-2);
+    context.rect(-5,-10,8,30);
+    context.rect(-15,-10,8,30);
+    context.rect(-25,-10,8,30);
+    context.fillStyle="green";
     context.fill();
     context.restore();
   }
