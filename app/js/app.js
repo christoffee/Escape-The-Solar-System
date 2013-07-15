@@ -118,39 +118,41 @@ jQuery(document).ready ( function () {
   }
 
   function drawPlanet() {
+    var grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/2.2, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(102, 255, 255, 0.8)");
+    grd.addColorStop(1,"rgba(102, 255, 255, 0.5)");
     context.beginPath();    
-    context.fillStyle = "rgba(102, 255, 255, 0.5)";
-    context.arc( canvasWidth / 2, canvasHeight - 10, canvasWidth / 2, 0, Math.PI * 5, true );
+    context.fillStyle = grd;
+    context.arc( canvasWidth / 2, canvasHeight, canvasWidth / 2, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
+    grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/2.5, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(102, 204, 102, 1)");
+    grd.addColorStop(1,"green");
     context.beginPath();    
-    context.fillStyle = "rgba(102, 204, 102, 1)";
-    context.arc( canvasWidth / 2, canvasHeight - 10, canvasWidth / 2.2, 0, Math.PI * 5, true );
+    context.fillStyle = grd;
+    context.arc( canvasWidth / 2, canvasHeight, canvasWidth / 2.2, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
-    context.fillStyle = 'rgba(51, 25, 0, 1)';
-    context.beginPath();
-    context.arc( canvasWidth / 2, canvasHeight - 10, canvasWidth / 2.25, 0, Math.PI * 5, true );
-    context.closePath();
-    context.fill();
 
-    context.fillStyle = 'rgba(102, 51, 0, 1)';
+    grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/30, canvasWidth/2, canvasHeight, canvasWidth/2.1);
+    grd.addColorStop(0,"rgba(102, 51, 0, 1)");
+    grd.addColorStop(1,"rgba(51, 25, 0, 1)");
+    context.fillStyle = grd;
     context.beginPath();
-    context.arc( canvasWidth / 2, canvasHeight - 10, canvasWidth / 3, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, canvasHeight, canvasWidth / 2.25, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
-    context.fillStyle = 'rgba(255, 178, 102, 1)';
-    context.beginPath();
-    context.arc( canvasWidth / 2, canvasHeight - 10, canvasWidth / 12, 0, Math.PI * 5, true );
-    context.closePath();
-    context.fill(); 
 
-    context.fillStyle = 'rgba(255, 225, 102, 1)';
+    grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/55, canvasWidth/2, canvasHeight, canvasWidth/12);
+    grd.addColorStop(0,"yellow");
+    grd.addColorStop(1,"orange");
+    context.fillStyle = grd;
     context.beginPath();
-    context.arc( canvasWidth / 2, canvasHeight - 10, canvasWidth / 18, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, canvasHeight, canvasWidth / 12, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
   }
@@ -204,95 +206,141 @@ jQuery(document).ready ( function () {
 
     var x = ((Math.sin( planetPosition ) * (canvasWidth / 8)) + canvasWidth / 2) ;
     var y = ((Math.cos( planetPosition ) * (canvasWidth / 8)) + canvasHeight);
-
+    var r = -(planetPosition*57) * Math.PI/180;
     //gold
-    context.beginPath();
-    context.fillStyle="yellow";
-    context.fillRect(x,y -15,5,5);
-    context.fill();
 
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r);
+    context.rect(-2.5,-17.5,5,5);
     context.fillStyle="yellow";
-    context.fillRect(x + 5,y,3,3);
     context.fill();
+    context.restore();
 
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r);
+    context.rect(-7.5,-1.5,3,3);
     context.fillStyle="yellow";
-    context.fillRect(x - 15,y,2,2);
     context.fill();
+    context.restore();
 
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r);
+    context.rect(-16,-1,2,2);
     context.fillStyle="yellow";
-    context.fillRect(x -6,y - 6,5,5);
     context.fill();
+    context.restore();
 
+    context.save();
+    context.beginPath();
+    context.translate(x,y);
+    context.rotate(r);
+    context.rect(-5.5,-8.5,5,5);
+    context.fillStyle="yellow";
+    context.fill();
+    context.restore();
+    
+    //coal
     x = ((Math.sin( planetPosition +0.5 ) * (canvasWidth / 4)) + canvasWidth / 2) ;
     y = ((Math.cos( planetPosition +0.5) * (canvasWidth / 4)) + canvasHeight);
-    //coal
+    
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r +1);
+    context.rect(-2.5,-7.5,5,5);
     context.fillStyle="black";
-    context.fillRect(x,y - 5,5,5);
     context.fill();
+    context.restore();
 
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r +1);
+    context.rect(-12.5,-2.5,3,3);
     context.fillStyle="black";
-    context.fillRect(x - 15,y ,3,3);
     context.fill();
+    context.restore();
 
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r +1);
+    context.rect(-1,-4,2,2);
     context.fillStyle="black";
-    context.fillRect(x - 15,y - 8,2,2);
     context.fill();
+    context.restore();
 
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r +1);
+    context.rect(-15.5,-8.5,5,5);
     context.fillStyle="black";
-    context.fillRect(x -6,y - 6,5,5);
     context.fill();
-
-    x = ((Math.sin( planetPosition -1.5 ) * (canvasWidth / 6)) + canvasWidth / 2) ;
-    y = ((Math.cos( planetPosition -1.5) * (canvasWidth / 6)) + canvasHeight);
+    context.restore();
 
     //jewles
+    x = ((Math.sin( planetPosition -1.5 ) * (canvasWidth / 6)) + canvasWidth / 2) ;
+    y = ((Math.cos( planetPosition -1.5) * (canvasWidth / 6)) + canvasHeight);
+    
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r);
+    context.rect(-2.5,-2.5,5,5);
     context.fillStyle="white";
-    context.fillRect(x,y - 5,5,5);
     context.fill();
+    context.restore();
 
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r);
+    context.rect(-6,-6,3,3);
     context.fillStyle="aqua";
-    context.fillRect(x + 5,y ,3,3);
     context.fill();
+    context.restore();
 
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r);
+    context.rect(-15,-8,2,2);
     context.fillStyle="aqua";
-    context.fillRect(x - 15,y - 8,2,2);
     context.fill();
-
+    context.restore();
+ 
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r);
+    context.rect(-5,-10,5,5);
     context.fillStyle="white";
-    context.fillRect(x -6,y - 6,5,5);
     context.fill();
+    context.restore();
 
-    context.beginPath();
-    context.fillStyle="white";
-    context.fillRect(x -1,y + 10,5,5);
-    context.fill();
   }
 
   function drawFactory () {
-
-    var y = (Math.sin( planetPosition ) * (canvasWidth / 2.15)) + canvasWidth / 2;
-    var x = (Math.cos( planetPosition ) * (canvasWidth / 2.15)) + canvasHeight ;
-    //var r = (Math.PI / (planetPosition));
-
-    //context.save();
+    var x = (Math.sin( planetPosition ) * (canvasWidth / 2.18)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition ) * (canvasWidth / 2.18)) + canvasHeight ;
+    var r = -(planetPosition*57) * Math.PI/180;
+    
+    context.save();
     context.beginPath();
+    context.translate(x,y);
+    context.rotate(r);
+    context.rect(-25,-5,50,10);
+    context.rect(-25,-5,5,30);
     context.fillStyle="#FF0000";
-    //context.translate(25,5);
-    //context.rotate(r);
-    context.fillRect(y,x +5,50,15);
-context.fill();
-    //context.restore();
+    context.fill();
+    context.restore();
   }
 
   function drawDashboard () {
