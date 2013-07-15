@@ -12,6 +12,7 @@ jQuery(document).ready ( function () {
   var canvas, context, toggle, starSize;
   var cloudsArr = [];
   var starsArr = [];
+  var planetSegments = [];
   var pulsate = 40;
   var canvasXCenter;
   var canvasyCenter;
@@ -33,6 +34,7 @@ jQuery(document).ready ( function () {
     canvasWidth = jQuery('body').width();
     canvasHeight = jQuery('body').height();
     createBackgound();
+    createPlanetSegments();
     canvas = document.createElement( 'canvas' );
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
@@ -73,8 +75,8 @@ jQuery(document).ready ( function () {
       drawFactory();
       drawLab();
       drawFlats();
+      drawSections();
       drawDashboard();
-      console.log(gameTime);
     }
   }
   
@@ -104,6 +106,18 @@ jQuery(document).ready ( function () {
       cloud.push(size,speed,direction);
       cloudsArr.push(cloud);
     }
+  }
+
+  function createPlanetSegments () {
+    
+    for (var i = 0; i <= 17; i++) {
+      var radians = (i / 90 * Math.PI) * 10;
+
+      planetSegments.push(radians);
+
+    };
+
+    console.log(planetSegments);
   }
 
   function drawBackground() {
@@ -339,14 +353,22 @@ jQuery(document).ready ( function () {
     context.translate(x,y);
     context.rotate(r);
     //factory
-    context.rect(-25,-5,50,10);
+    context.rect(-25,-5,40,10);
     context.rect(-25,-5,5,30);
+    //factory roof
+    context.moveTo(-15,5);
+    context.lineTo(-15,15);
+    context.lineTo(0,5);
+    context.moveTo(0,5);
+    context.lineTo(0,15);
+    context.lineTo(15,5);
     //mine
     context.rect(-5,-50,2,50);
     context.rect(-25,-50,70,2);
     context.rect(-35,-50,30,2);
     context.rect(-15,-150,2,100);
     context.rect(-12,-150,20,2);
+
     context.fillStyle="#FF0000";
     context.fill();
     context.restore();
@@ -361,7 +383,12 @@ jQuery(document).ready ( function () {
     context.beginPath();
     context.translate(x,y);
     context.rotate(r-5);
-    context.rect(-25,-10,50,20);
+    context.rect(-25,-10,50,15);
+    //roof
+    context.moveTo(-25,5);
+    context.lineTo(-25,15);
+    context.lineTo(25,5);
+
     context.fillStyle="blue";
     context.fill();
     context.restore();
@@ -382,6 +409,26 @@ jQuery(document).ready ( function () {
     context.fillStyle="green";
     context.fill();
     context.restore();
+  }
+
+  function drawSections () {
+    for (var arr in planetSegments) {
+        var segDeg = planetSegments[arr];
+
+        var x = (Math.sin( planetPosition +segDeg) * (canvasWidth / 2.25)) + canvasWidth / 2;
+        var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.25)) + canvasHeight ;
+        context.beginPath();
+
+        context.strokeStyle = 'rgba(255, 205, 0, 0.05)';
+        context.moveTo(canvasWidth/2,canvasHeight);
+        context.lineTo(x,y);
+
+        context.closePath();
+        context.stroke();
+      
+    }
+    
+
   }
 
   function drawDashboard () {
