@@ -22,6 +22,7 @@ jQuery(document).ready ( function () {
   var canvasWidth;
   var planetPosition = 3;
   var gameTime = 12345678;
+  var unit =0;
 
   init();
 
@@ -41,6 +42,8 @@ jQuery(document).ready ( function () {
 
     canvasXCenter = canvasWidth/ 2;
     canvasyCenter = canvasHeight / 2;
+    unit = canvasWidth / 300;
+    console.log(unit);
 
     window.addEventListener( "keydown", doKeyDown, true);
 
@@ -403,8 +406,8 @@ jQuery(document).ready ( function () {
     context.beginPath();
     context.translate(x,y);
     context.rotate(r-2);
-    context.rect(-5,-10,8,30);
-    context.rect(-15,-10,8,30);
+    context.rect(-unit,-(unit*2),(unit*1.5),(unit*6));
+    context.rect(-(unit*3),-(unit*2),(unit*1.5),(unit*6));
     context.rect(-25,-10,8,30);
     context.fillStyle="green";
     context.fill();
