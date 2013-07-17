@@ -349,7 +349,7 @@ jQuery(document).ready ( function () {
     var segDeg = planetSegments[2];
     var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
     var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
-    var r = -((planetPosition*57) * Math.PI/180) -(segDeg);
+    var r = -(planetPosition +segDeg);
     
     context.save();
     context.beginPath();
@@ -381,7 +381,7 @@ jQuery(document).ready ( function () {
     var segDeg = planetSegments[3];
     var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
     var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
-    var r =  -((planetPosition*57) * Math.PI/180) -(segDeg);
+    var r = -(planetPosition +segDeg);
     
     context.save();
     context.beginPath();
@@ -430,7 +430,7 @@ jQuery(document).ready ( function () {
     var segDeg = planetSegments[0];
     var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
     var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
-    var r = -((planetPosition*57) * Math.PI/180) -(segDeg);
+    var r = -(planetPosition +segDeg);
     
     context.save();
     context.beginPath();
