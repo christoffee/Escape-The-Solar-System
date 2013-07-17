@@ -78,6 +78,7 @@ jQuery(document).ready ( function () {
       drawFactory();
       drawLab();
       drawFlats();
+      drawRocket();
       drawSections();
       drawDashboard();
     }
@@ -119,8 +120,6 @@ jQuery(document).ready ( function () {
       planetSegments.push(radians);
 
     };
-
-    console.log(planetSegments);
   }
 
   function drawBackground() {
@@ -347,26 +346,27 @@ jQuery(document).ready ( function () {
   }
 
   function drawFactory () {
-    var x = (Math.sin( planetPosition ) * (canvasWidth / 2.18)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition ) * (canvasWidth / 2.18)) + canvasHeight ;
-    var r = -(planetPosition*57) * Math.PI/180;
+    var segDeg = planetSegments[2];
+    var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
+    var r = -((planetPosition*57) * Math.PI/180) -(segDeg);
     
     context.save();
     context.beginPath();
     context.translate(x,y);
     context.rotate(r);
     //factory
-    context.rect(-25,-5,40,10);
-    context.rect(-25,-5,5,30);
+    context.rect(-25,0,40,10);
+    context.rect(-25,0,5,30);
     //factory roof
-    context.moveTo(-15,5);
-    context.lineTo(-15,15);
-    context.lineTo(0,5);
-    context.moveTo(0,5);
-    context.lineTo(0,15);
-    context.lineTo(15,5);
+    context.moveTo(-15,10);
+    context.lineTo(-15,20);
+    context.lineTo(0,10);
+    context.moveTo(0,10);
+    context.lineTo(0,20);
+    context.lineTo(15,10);
     //mine
-    context.rect(-5,-50,2,50);
+    context.rect(0,-50,2,50);
     context.rect(-25,-50,70,2);
     context.rect(-35,-50,30,2);
     context.rect(-15,-150,2,100);
@@ -378,37 +378,74 @@ jQuery(document).ready ( function () {
   }
 
   function drawLab () {
-    var x = (Math.sin( planetPosition +5) * (canvasWidth / 2.18)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition +5) * (canvasWidth / 2.18)) + canvasHeight ;
-    var r = -(planetPosition*57) * Math.PI/180;
+    var segDeg = planetSegments[3];
+    var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
+    var r =  -((planetPosition*57) * Math.PI/180) -(segDeg);
     
     context.save();
     context.beginPath();
     context.translate(x,y);
-    context.rotate(r-5);
-    context.rect(-25,-10,50,15);
+    context.rotate(r);
+    context.rect(-25,0,50,15);
     //roof
-    context.moveTo(-25,5);
-    context.lineTo(-25,15);
-    context.lineTo(25,5);
+    context.moveTo(-25,15);
+    context.lineTo(15,25);
+    context.lineTo(25,15);
 
     context.fillStyle="blue";
     context.fill();
     context.restore();
   }
 
-  function drawFlats () {
-    var x = (Math.sin( planetPosition +2) * (canvasWidth / 2.18)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition +2) * (canvasWidth / 2.18)) + canvasHeight ;
-    var r = -(planetPosition*57) * Math.PI/180;
+  function drawRocket() {
+    var segDeg = planetSegments[17];
+    var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
+    var r = -((planetPosition*57) * Math.PI/180) -(segDeg);
     
     context.save();
     context.beginPath();
     context.translate(x,y);
+    context.rotate(r);
+    //body
+    context.rect(0,3,5,20);
+    //wings
+    context.moveTo(5,0);
+    context.lineTo(5,10);
+    context.lineTo(15,0);
+    context.moveTo(0,0);
+    context.lineTo(0,10);
+    context.lineTo(-10,0);
+    //head
+    context.moveTo(7,25);
+    context.lineTo(-2,25);
+    context.lineTo(2,30);
+    context.fillStyle="orange";
+    context.fill();
+    context.restore();
+  }
+
+  function drawFlats () {
+    var segDeg = planetSegments[4];
+    var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
+    var r = -((planetPosition*57) * Math.PI/180) -(segDeg);
+    
+    context.save();
+    context.beginPath();
+    context.translate(x,y);
+<<<<<<< HEAD
     context.rotate(r-2);
     context.rect(-unit,-(unit*2),(unit*1.5),(unit*6));
     context.rect(-(unit*3),-(unit*2),(unit*1.5),(unit*6));
     context.rect(-25,-10,8,30);
+=======
+    context.rotate(r);
+    context.rect(0,0,8,30);
+    context.rect(10,0,8,30);
+    context.rect(-10,0,8,30);
+>>>>>>> 65d1a70710106404e39ff09c4460b93d221b26aa
     context.fillStyle="green";
     context.fill();
     context.restore();
