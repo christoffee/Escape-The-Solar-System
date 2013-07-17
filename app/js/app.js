@@ -491,6 +491,21 @@ jQuery(document).ready ( function () {
     var gameText = planetPosition;
     context.fillText(gameText,canvasWidth / 2 - 45,45)
     context.fill();
+
+    //next turn
+    context.save();
+    context.beginPath();
+    //context.translate(canvasWidth/2,canvasHeight-90);
+    context.rect(canvasWidth-(unit*39),canvasHeight-(unit*15),unit*36,unit*12);
+    context.fillStyle="red";
+    context.fill();
+    context.restore();
+
+    context.beginPath();
+    context.fillStyle="white";
+    context.font="30px Arial";
+    context.fillText("Next Gen",canvasWidth-(unit*36),canvasHeight-(unit*6))
+    context.fill();
   }
 
 });
