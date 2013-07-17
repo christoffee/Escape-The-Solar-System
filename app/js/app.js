@@ -427,7 +427,7 @@ jQuery(document).ready ( function () {
   }
 
   function drawFlats () {
-    var segDeg = planetSegments[4];
+    var segDeg = planetSegments[0];
     var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
     var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
     var r = -((planetPosition*57) * Math.PI/180) -(segDeg);
@@ -435,17 +435,17 @@ jQuery(document).ready ( function () {
     context.save();
     context.beginPath();
     context.translate(x,y);
-<<<<<<< HEAD
-    context.rotate(r-2);
-    context.rect(-unit,-(unit*2),(unit*1.5),(unit*6));
-    context.rect(-(unit*3),-(unit*2),(unit*1.5),(unit*6));
-    context.rect(-25,-10,8,30);
-=======
+
     context.rotate(r);
-    context.rect(0,0,8,30);
-    context.rect(10,0,8,30);
-    context.rect(-10,0,8,30);
->>>>>>> 65d1a70710106404e39ff09c4460b93d221b26aa
+    context.rect(-(unit*11),-((unit*11)/16),(unit*1.5),(unit*3));
+    context.rect(-(unit*7),-((unit*7)/16),(unit*1.5),(unit*5));
+    context.rect(-(unit*5),-((unit*5)/16),(unit*1.5),(unit*6));
+    context.rect(-unit,-((unit)/16),(unit*1.5),(unit*6));
+    context.rect(0,0,(unit*1.5),(unit*4));
+    context.rect((unit*8),-((unit*8)/16),(unit*1.5),(unit*6));
+    context.rect((unit*9),-((unit*9)/16),(unit*1.5),(unit*2));
+    context.rect((unit*11),-((unit*11)/16),(unit*1.5),(unit*8));
+
     context.fillStyle="green";
     context.fill();
     context.restore();
