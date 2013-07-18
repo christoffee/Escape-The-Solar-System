@@ -23,6 +23,7 @@ jQuery(document).ready ( function () {
   var planetPosition = 3;
   var gameTime = 12345678;
   var unit =0;
+  var generation =0;
 
   init();
 
@@ -43,9 +44,10 @@ jQuery(document).ready ( function () {
     canvasXCenter = canvasWidth/ 2;
     canvasyCenter = canvasHeight / 2;
     unit = canvasWidth / 300;
-    console.log(unit);
 
+    window.addEventListener("mousedown", mouseClick, true);
     window.addEventListener( "keydown", doKeyDown, true);
+    window.addEventListener( "o", scroll, true);
 
     context = canvas.getContext( '2d' );
     context.fillStyle = "black";
@@ -54,6 +56,8 @@ jQuery(document).ready ( function () {
 
     document.body.appendChild( canvas );
   }
+
+  
 
   function doKeyDown (e) {
     //left
@@ -366,11 +370,11 @@ jQuery(document).ready ( function () {
     context.lineTo(0,20);
     context.lineTo(15,10);
     //mine
-    context.rect(0,-50,2,50);
-    context.rect(-25,-50,70,2);
-    context.rect(-35,-50,30,2);
-    context.rect(-15,-150,2,100);
-    context.rect(-12,-150,20,2);
+    if(generation>1){ context.rect(0,-50,2,50); }
+    if(generation>3){ context.rect(-25,-50,70,2); }
+    if(generation>5){ context.rect(-35,-50,30,2); }
+    if(generation>7){ context.rect(-15,-150,2,100); }
+    if(generation>9){ context.rect(-12,-150,20,2); }
 
     context.fillStyle="#FF0000";
     context.fill();
@@ -387,12 +391,27 @@ jQuery(document).ready ( function () {
     context.beginPath();
     context.translate(x,y);
     context.rotate(r);
+    if(generation==1){
+    context.rect(-25,0,50,5);
+    //roof
+    }
+    if(generation==2){
+    context.rect(-25,0,50,7);
+    //roof
+    }
+    if(generation==3){
+    context.rect(-25,0,50,12);
+    //roof
+    }
+    if(generation>3){
     context.rect(-25,0,50,15);
     //roof
+    }
+  if(generation>9){
     context.moveTo(-25,15);
     context.lineTo(15,25);
     context.lineTo(25,15);
-
+    }
     context.fillStyle="blue";
     context.fill();
     context.restore();
@@ -437,14 +456,15 @@ jQuery(document).ready ( function () {
     context.translate(x,y);
 
     context.rotate(r);
-    context.rect(-(unit*11),-((unit*11)/16),(unit*1.5),(unit*3));
-    context.rect(-(unit*7),-((unit*7)/16),(unit*1.5),(unit*5));
+    if(generation>9){ context.rect(-(unit*11),-((unit*11)/16),(unit*1.5),(unit*3)); }
+    if(generation>5){ context.rect(-(unit*7),-((unit*7)/16),(unit*1.5),(unit*5)); }
     context.rect(-(unit*5),-((unit*5)/16),(unit*1.5),(unit*6));
     context.rect(-unit,-((unit)/16),(unit*1.5),(unit*6));
     context.rect(0,0,(unit*1.5),(unit*4));
-    context.rect((unit*8),-((unit*8)/16),(unit*1.5),(unit*6));
+    if(generation>1){ context.rect((unit*8),-((unit*8)/16),(unit*1.5),(unit*6)); }
+    
     context.rect((unit*9),-((unit*9)/16),(unit*1.5),(unit*2));
-    context.rect((unit*11),-((unit*11)/16),(unit*1.5),(unit*8));
+    if(generation>4){ context.rect((unit*11),-((unit*11)/16),(unit*1.5),(unit*8)); }
 
     context.fillStyle="green";
     context.fill();
@@ -481,14 +501,14 @@ jQuery(document).ready ( function () {
     //timer
     context.beginPath();
     context.fillStyle="#fff";
-    context.fillRect(canvasWidth / 2 - 45,5,90,40);
+    context.fillRect(canvasWidth / 2 - 75,5,250,40);
     context.fill();
 
     //generation
     context.beginPath();
     context.fillStyle="#000";
     context.font="30px Arial";
-    var gameText = planetPosition;
+    var gameText = "Generation: " + generation;
     context.fillText(gameText,canvasWidth / 2 - 45,45)
     context.fill();
 
@@ -507,5 +527,18 @@ jQuery(document).ready ( function () {
     context.fillText("Next Gen",canvasWidth-(unit*36),canvasHeight-(unit*6))
     context.fill();
   }
+
+  function mouseClick (e) {
+    //alert(e.y);
+    if(e.x >= canvasWidth-(unit*39) && e.x <= (canvasWidth-(unit*39)) + unit*36  && e.y >= canvasHeight-(unit*15) && e.y <= (canvasHeight-(unit*15))+ unit*12){
+      
+    generation++;
+      //alert('generation' + generation);
+    }
+  }
+
+  function scroll () {
+    alert("scroll event detected! " + window.pageXOffset + " " + window.pageYOffset);
+}
 
 });
