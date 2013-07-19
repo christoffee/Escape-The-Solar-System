@@ -14,8 +14,6 @@ jQuery(document).ready ( function () {
   var starsArr = [];
   var planetSegments = [];
   var pulsate = 40;
-  var canvasXCenter;
-  var canvasyCenter;
   var expAlpha = 0.5;
   var expSize = 0;
   var canvasHeight;
@@ -24,6 +22,9 @@ jQuery(document).ready ( function () {
   var gameTime = 12345678;
   var unit =0;
   var generation =0;
+  var screenDepth = 1;
+  var stageX;
+  var stageY;
 
   init();
 
@@ -41,13 +42,11 @@ jQuery(document).ready ( function () {
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
 
-    canvasXCenter = canvasWidth/ 2;
-    canvasyCenter = canvasHeight / 2;
+    
     unit = canvasWidth / 300;
 
     window.addEventListener("mousedown", mouseClick, true);
     window.addEventListener( "keydown", doKeyDown, true);
-    window.addEventListener( "o", scroll, true);
 
     context = canvas.getContext( '2d' );
     context.fillStyle = "black";
@@ -56,8 +55,6 @@ jQuery(document).ready ( function () {
 
     document.body.appendChild( canvas );
   }
-
-  
 
   function doKeyDown (e) {
     //left
@@ -69,12 +66,28 @@ jQuery(document).ready ( function () {
 
       planetPosition -= 0.05;
     }
+    //down 40
+    if (e.keyCode == 40) {
+
+      screenDepth -= 0.05;
+    }
+    //up 38
+    if (e.keyCode == 38) {
+      if(screenDepth  != 1)
+      {
+      screenDepth += 0.05;
+    }
+
+    }
+    console.log(e.keyCode);
   }
 
   function render() {
     if(context){
       context.clearRect(0,0,canvasWidth,canvasHeight);
-
+      stageX = canvasWidth * screenDepth;
+      stageY = canvasHeight * screenDepth;
+      unit = (stageX / 300 );
       drawBackground();
       drawPlanet();
       drawResources();
@@ -105,7 +118,7 @@ jQuery(document).ready ( function () {
     for (i = 0; i <= 120; i++) {
       var cloud = [];
       // Get random positions for stars.
-      var size = Math.floor(Math.random() * 4) + 2.5;
+      var size = Math.floor(Math.random() * 2) + 1;
       var speed = (Math.random()*0.00001+0.000001).toFixed(8);
       toggle = !toggle;
 
@@ -145,7 +158,7 @@ jQuery(document).ready ( function () {
     grd.addColorStop(1,"rgba(102, 255, 255, 0.5)");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 2, canvasHeight, canvasWidth / 2, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, canvasHeight, stageX / 2, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
@@ -154,7 +167,7 @@ jQuery(document).ready ( function () {
     grd.addColorStop(1,"green");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 2, canvasHeight, canvasWidth / 2.2, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, canvasHeight, stageX / 2.2, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
@@ -164,7 +177,7 @@ jQuery(document).ready ( function () {
     grd.addColorStop(1,"rgba(51, 25, 0, 1)");
     context.fillStyle = grd;
     context.beginPath();
-    context.arc( canvasWidth / 2, canvasHeight, canvasWidth / 2.25, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, canvasHeight, stageX / 2.25, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
@@ -174,7 +187,7 @@ jQuery(document).ready ( function () {
     grd.addColorStop(1,"orange");
     context.fillStyle = grd;
     context.beginPath();
-    context.arc( canvasWidth / 2, canvasHeight, canvasWidth / 12, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, canvasHeight, stageX / 12, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
   }
@@ -191,8 +204,8 @@ jQuery(document).ready ( function () {
         	time = -time;
         }
 
-        var cloudx = Math.sin( time ) * ((canvasWidth / 2.12) + cloudSize *4) + canvasWidth / 2;
-        var cloudy = Math.cos( time ) * ((canvasWidth / 2.12) + cloudSize *4) + canvasHeight;
+        var cloudx = Math.sin( time ) * ((stageX / 2.18) + cloudSize*unit *4) + canvasWidth / 2;
+        var cloudy = Math.cos( time ) * ((stageX / 2.18) + cloudSize*unit *4) + canvasHeight;
 
         var cloud2x = Math.sin( time - 2 ) * 5 + cloudx;
         var cloud2y = Math.cos( time - 2 ) * 5 + cloudy;
@@ -202,21 +215,21 @@ jQuery(document).ready ( function () {
 
         context.beginPath();
         context.fillStyle = "rgba(255, 255, 255, 0.5)";
-        context.arc( cloudx, cloudy, cloudSize, 0, Math.PI * 5, true );
+        context.arc( cloudx, cloudy, cloudSize*unit, 0, Math.PI * 5, true );
         context.closePath();
 
         context.fill();
 
         context.beginPath();
         context.fillStyle = "rgba(255, 255, 255, 0.4)";
-        context.arc( cloud2x, cloud2y, cloudSize / 2, 0, Math.PI * 5, true );
+        context.arc( cloud2x, cloud2y, cloudSize*unit / 2, 0, Math.PI * 5, true );
         context.closePath();
 
         context.fill();
 
         context.beginPath();
         context.fillStyle = "rgba(255, 255, 255, 0.4)";
-        context.arc( cloud3x, cloud3y, cloudSize /1.5, 0, Math.PI * 5, true );
+        context.arc( cloud3x, cloud3y, cloudSize*unit /1.5, 0, Math.PI * 5, true );
         context.closePath();
 
         context.fill();
@@ -226,8 +239,8 @@ jQuery(document).ready ( function () {
 
   function drawResources () {
 
-    var x = ((Math.sin( planetPosition ) * (canvasWidth / 8)) + canvasWidth / 2) ;
-    var y = ((Math.cos( planetPosition ) * (canvasWidth / 8)) + canvasHeight);
+    var x = ((Math.sin( planetPosition ) * (stageX / 8)) + canvasWidth / 2) ;
+    var y = ((Math.cos( planetPosition ) * (stageX / 8)) + canvasHeight);
     var r = -(planetPosition*57) * Math.PI/180;
     //gold
 
@@ -268,8 +281,8 @@ jQuery(document).ready ( function () {
     context.restore();
     
     //coal
-    x = ((Math.sin( planetPosition +0.5 ) * (canvasWidth / 4)) + canvasWidth / 2) ;
-    y = ((Math.cos( planetPosition +0.5) * (canvasWidth / 4)) + canvasHeight);
+    x = ((Math.sin( planetPosition +0.5 ) * (stageX / 4)) + canvasWidth / 2) ;
+    y = ((Math.cos( planetPosition +0.5) * (stageX / 4)) + canvasHeight);
     
     context.save();
     context.beginPath();
@@ -308,14 +321,14 @@ jQuery(document).ready ( function () {
     context.restore();
 
     //jewles
-    x = ((Math.sin( planetPosition -1.5 ) * (canvasWidth / 6)) + canvasWidth / 2) ;
-    y = ((Math.cos( planetPosition -1.5) * (canvasWidth / 6)) + canvasHeight);
+    x = ((Math.sin( planetPosition -1.5 ) * (stageX / 6)) + canvasWidth / 2) ;
+    y = ((Math.cos( planetPosition -1.5) * (stageX / 6)) + canvasHeight);
     
     context.save();
     context.beginPath();
     context.translate(x,y);
     context.rotate(r);
-    context.rect(-2.5,-2.5,5,5);
+    context.rect(-(unit/2),-(unit/2),unit,unit);
     context.fillStyle="white";
     context.fill();
     context.restore();
@@ -324,7 +337,7 @@ jQuery(document).ready ( function () {
     context.beginPath();
     context.translate(x,y);
     context.rotate(r);
-    context.rect(-6,-6,3,3);
+    context.rect(-(unit*1.5),-(unit*1.5),unit,unit);
     context.fillStyle="aqua";
     context.fill();
     context.restore();
@@ -333,7 +346,7 @@ jQuery(document).ready ( function () {
     context.beginPath();
     context.translate(x,y);
     context.rotate(r);
-    context.rect(-15,-8,2,2);
+    context.rect(-(unit*3),-(unit*2),(unit/2),(unit/2));
     context.fillStyle="aqua";
     context.fill();
     context.restore();
@@ -342,7 +355,7 @@ jQuery(document).ready ( function () {
     context.beginPath();
     context.translate(x,y);
     context.rotate(r);
-    context.rect(-5,-10,5,5);
+    context.rect(-unit,-(unit*2),unit,unit);
     context.fillStyle="white";
     context.fill();
     context.restore();
@@ -350,9 +363,9 @@ jQuery(document).ready ( function () {
   }
 
   function drawFactory () {
-    var segDeg = planetSegments[2];
-    var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
+    var segDeg = planetSegments[4];
+    var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + canvasHeight ;
     var r = -(planetPosition +segDeg);
     
     context.save();
@@ -360,18 +373,18 @@ jQuery(document).ready ( function () {
     context.translate(x,y);
     context.rotate(r);
     //factory
-    context.rect(-25,0,40,10);
-    context.rect(-25,0,5,30);
+    context.rect(-(unit*5),0,(unit*8),(unit*2));
+    context.rect(-(unit*5),0,unit,(unit*6));
     //factory roof
-    context.moveTo(-15,10);
-    context.lineTo(-15,20);
-    context.lineTo(0,10);
-    context.moveTo(0,10);
-    context.lineTo(0,20);
-    context.lineTo(15,10);
+    context.moveTo(-(unit*3),(unit*2));
+    context.lineTo(-(unit*3),(unit*4));
+    context.lineTo(0,(unit*2));
+    context.moveTo(0,(unit*2));
+    context.lineTo(0,(unit*4));
+    context.lineTo((unit*3),(unit*2));
     //mine
-    if(generation>1){ context.rect(0,-50,2,50); }
-    if(generation>3){ context.rect(-25,-50,70,2); }
+    if(generation>1){ context.rect(0,-(unit*10),(unit/2),(unit*10)); }
+    if(generation>3){ context.rect(-(unit*5),-(unit*10),(unit*14),(unit/2)); }
     if(generation>5){ context.rect(-35,-50,30,2); }
     if(generation>7){ context.rect(-15,-150,2,100); }
     if(generation>9){ context.rect(-12,-150,20,2); }
@@ -383,8 +396,8 @@ jQuery(document).ready ( function () {
 
   function drawLab () {
     var segDeg = planetSegments[3];
-    var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
+    var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + canvasHeight ;
     var r = -(planetPosition +segDeg);
     
     context.save();
@@ -392,25 +405,25 @@ jQuery(document).ready ( function () {
     context.translate(x,y);
     context.rotate(r);
     if(generation==1){
-    context.rect(-25,0,50,5);
+    context.rect(-(unit*5),0,(unit*10),unit);
     //roof
     }
     if(generation==2){
-    context.rect(-25,0,50,7);
+    context.rect(-(unit*5),0,(unit*10),(unit*2));
     //roof
     }
     if(generation==3){
-    context.rect(-25,0,50,12);
+    context.rect(-(unit*5),0,(unit*10),(unit*3));
     //roof
     }
     if(generation>3){
-    context.rect(-25,0,50,15);
+    context.rect(-(unit*5),0,(unit*10),(unit*4));
     //roof
     }
   if(generation>9){
-    context.moveTo(-25,15);
-    context.lineTo(15,25);
-    context.lineTo(25,15);
+    context.moveTo(-(unit*5),(unit*4));
+    context.lineTo((unit*4),(unit*5));
+    context.lineTo((unit*5),(unit*4));
     }
     context.fillStyle="blue";
     context.fill();
@@ -419,8 +432,8 @@ jQuery(document).ready ( function () {
 
   function drawRocket() {
     var segDeg = planetSegments[17];
-    var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
+    var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + canvasHeight ;
     var r = -((planetPosition*57) * Math.PI/180) -(segDeg);
     
     context.save();
@@ -447,8 +460,8 @@ jQuery(document).ready ( function () {
 
   function drawFlats () {
     var segDeg = planetSegments[0];
-    var x = (Math.sin( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.2)) + canvasHeight ;
+    var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + canvasHeight ;
     var r = -(planetPosition +segDeg);
     
     context.save();
@@ -537,8 +550,6 @@ jQuery(document).ready ( function () {
     }
   }
 
-  function scroll () {
-    alert("scroll event detected! " + window.pageXOffset + " " + window.pageYOffset);
-}
+  
 
 });
