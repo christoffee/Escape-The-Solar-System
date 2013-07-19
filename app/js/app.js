@@ -68,8 +68,10 @@ jQuery(document).ready ( function () {
     }
     //down 40
     if (e.keyCode == 40) {
-
+      if(screenDepth  > 0.05)
+      {
       screenDepth -= 0.05;
+      }
     }
     //up 38
     if (e.keyCode == 38) {
@@ -85,18 +87,22 @@ jQuery(document).ready ( function () {
   function render() {
     if(context){
       context.clearRect(0,0,canvasWidth,canvasHeight);
+      drawBackground();
       stageX = canvasWidth * screenDepth;
       stageY = canvasHeight * screenDepth;
       unit = (stageX / 300 );
-      drawBackground();
-      drawPlanet();
-      drawResources();
-      drawClouds();
-      drawFactory();
-      drawLab();
-      drawFlats();
-      drawRocket();
-      drawSections();
+      if(screenDepth >= 0.1){
+        drawPlanet();
+        drawResources();
+        drawClouds();
+        drawFactory();
+        drawLab();
+        drawFlats();
+        drawRocket();
+        drawSections();
+      }else{
+        drawPlanetTop();
+      }
       drawDashboard();
     }
   }
@@ -150,6 +156,27 @@ jQuery(document).ready ( function () {
         context.fill();
       }
     }
+  }
+  function drawPlanetTop() {
+    var grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/2.5, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(102, 204, 102, 1)");
+    grd.addColorStop(1,"green");
+    context.beginPath();    
+    context.fillStyle = grd;
+    context.arc( canvasWidth / 2, canvasHeight - (screenDepth*50), stageX / 2.2, 0, Math.PI * 5, true );
+    context.closePath();
+    context.fill(); 
+    
+    grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/2.2, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(102, 255, 255, 0.3)");
+    grd.addColorStop(1,"rgba(102, 255, 255, 0.1)");
+    context.beginPath();    
+    context.fillStyle = grd;
+    context.arc( canvasWidth / 2, canvasHeight - (screenDepth*50), stageX / 2, 0, Math.PI * 5, true );
+    context.closePath();
+    context.fill(); 
+
+    
   }
 
   function drawPlanet() {
@@ -385,9 +412,9 @@ jQuery(document).ready ( function () {
     //mine
     if(generation>1){ context.rect(0,-(unit*10),(unit/2),(unit*10)); }
     if(generation>3){ context.rect(-(unit*5),-(unit*10),(unit*14),(unit/2)); }
-    if(generation>5){ context.rect(-35,-50,30,2); }
-    if(generation>7){ context.rect(-15,-150,2,100); }
-    if(generation>9){ context.rect(-12,-150,20,2); }
+    if(generation>5){ context.rect(-(unit*7),-(unit*10),(unit*6),(unit/2)); }
+    if(generation>7){ context.rect(-(unit*3),-(unit*30),(unit/2),(unit*20)); }
+    if(generation>9){ context.rect(-(unit*3),-(unit*30),(unit*4),(unit/2)); }
 
     context.fillStyle="#FF0000";
     context.fill();
@@ -431,7 +458,7 @@ jQuery(document).ready ( function () {
   }
 
   function drawRocket() {
-    var segDeg = planetSegments[17];
+    /*var segDeg = planetSegments[17];
     var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
     var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + canvasHeight ;
     var r = -((planetPosition*57) * Math.PI/180) -(segDeg);
@@ -455,7 +482,7 @@ jQuery(document).ready ( function () {
     context.lineTo(2,30);
     context.fillStyle="orange";
     context.fill();
-    context.restore();
+    context.restore();*/
   }
 
   function drawFlats () {
