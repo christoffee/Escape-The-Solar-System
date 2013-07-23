@@ -9,6 +9,8 @@ jQuery(document).ready ( function () {
         };
   })();
 
+  //planetarrays - NAME , INNERGRAD , OUTERGRAD ,GRADRADIUS , RADIUS 
+  var earth = [['sky',"rgba(102, 255, 255, 0.8)","rgba(102, 255, 255, 0.5)",2.2, 2],['grass',"rgba(102, 204, 102, 1)","green",2.25, 2.2],['mud',"rgba(102, 51, 0, 1)","rgba(51, 25, 0, 1)",30, 2.25],['core',"yellow","orange",55, 12]];
   var canvas, context, toggle, starSize,canvasHeight,canvasWidth,stageX,stageY;
   var cloudsArr = [];
   var starsArr = [];
@@ -102,7 +104,7 @@ jQuery(document).ready ( function () {
       }
       
       if(screenDepth >= 0.3){
-        drawPlanet();
+        drawPlanet(context,earth);
         drawResources();
         drawClouds();
         drawFactory();
@@ -240,44 +242,24 @@ function drawMars() {
 
     
   }
-  function drawPlanet() {
-    var grd = context.createRadialGradient(canvasWidth/2, stageY, stageX/2.2, canvasWidth/2, stageY, stageX/2);
-    grd.addColorStop(0,"rgba(102, 255, 255, 0.8)");
-    grd.addColorStop(1,"rgba(102, 255, 255, 0.5)");
-    context.beginPath();    
-    context.fillStyle = grd;
-    context.arc( canvasWidth / 2, stageY, stageX / 2, 0, Math.PI * 5, true );
-    context.closePath();
-    context.fill(); 
 
-    grd = context.createRadialGradient(canvasWidth/2, stageY, canvasWidth/2.5, canvasWidth/2, stageY, canvasWidth/2);
-    grd.addColorStop(0,"rgba(102, 204, 102, 1)");
-    grd.addColorStop(1,"green");
-    context.beginPath();    
-    context.fillStyle = grd;
-    context.arc( canvasWidth / 2, stageY, stageX / 2.2, 0, Math.PI * 5, true );
-    context.closePath();
-    context.fill(); 
+  function drawPlanet(context,planetArr) {
+    for(var arr in planetArr){
+      var layerName = planetArr[arr][0],
+          gradColour1 = planetArr[arr][1],
+          gradColour2 = planetArr[arr][2],
+          gradRadius = planetArr[arr][3],
+          layerRadius = planetArr[arr][4];
+      var grd = context.createRadialGradient(canvasWidth/2, stageY, stageX/gradRadius, canvasWidth/2, stageY, stageX/2);
+      grd.addColorStop(0,gradColour1);
+      grd.addColorStop(1,gradColour2);
 
-
-    grd = context.createRadialGradient(canvasWidth/2, stageY, canvasWidth/30, canvasWidth/2, stageY, canvasWidth/2.1);
-    grd.addColorStop(0,"rgba(102, 51, 0, 1)");
-    grd.addColorStop(1,"rgba(51, 25, 0, 1)");
-    context.fillStyle = grd;
-    context.beginPath();
-    context.arc( canvasWidth / 2, stageY, stageX / 2.25, 0, Math.PI * 5, true );
-    context.closePath();
-    context.fill(); 
-
-
-    grd = context.createRadialGradient(canvasWidth/2, stageY, canvasWidth/55, canvasWidth/2, stageY, canvasWidth/12);
-    grd.addColorStop(0,"yellow");
-    grd.addColorStop(1,"orange");
-    context.fillStyle = grd;
-    context.beginPath();
-    context.arc( canvasWidth / 2, stageY, stageX / 12, 0, Math.PI * 5, true );
-    context.closePath();
-    context.fill(); 
+      context.beginPath();
+      context.fillStyle = grd;
+      context.arc( canvasWidth / 2, stageY, stageX / layerRadius, 0, Math.PI * 5, true );
+      context.fill();
+      context.closePath();
+    }
   }
 
   function drawClouds(){
