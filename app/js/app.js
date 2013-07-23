@@ -9,23 +9,17 @@ jQuery(document).ready ( function () {
         };
   })();
 
-  var canvas, context, toggle, starSize;
+  var canvas, context, toggle, starSize,canvasHeight,canvasWidth,stageX,stageY;
   var cloudsArr = [];
   var starsArr = [];
   var planetSegments = [];
+  var buildingLocations = [];
   var pulsate = 40;
-  var expAlpha = 0.5;
-  var expSize = 0;
-  var canvasHeight;
-  var canvasWidth;
-  var planetPosition = 3;
+  var planetPosition = 0;
   var gameTime = 12345678;
   var unit =0;
   var generation =0;
   var screenDepth = 1;
-  var stageX;
-  var stageY;
-var pulsate = 40;
 
   init();
 
@@ -178,7 +172,6 @@ var pulsate = 40;
       context.arc( -stageX / 8, canvasHeight /2, 40, 0, Math.PI * 5, true );
       context.closePath();
       context.fill(); 
-    console.log(unit*40);
     
   }
 
@@ -186,8 +179,9 @@ var pulsate = 40;
     
     for (var i = 0; i <= 17; i++) {
       var radians = (i / 90 * Math.PI) * 10;
-
-      planetSegments.push(radians);
+      var planetSegment =[];
+      planetSegment.push(radians, false);
+      planetSegments.push(planetSegment);
 
     };
   }
@@ -457,10 +451,10 @@ function drawMars() {
   }
 
   function drawFactory () {
-    var segDeg = planetSegments[4];
-    var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + stageY ;
-    var r = -(planetPosition +segDeg);
+    var location = planetSegments[4][0];
+    var x = (Math.sin( planetPosition+location) * (stageX / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
+    var r = -(planetPosition +location);
     
     context.save();
     context.beginPath();
@@ -489,10 +483,10 @@ function drawMars() {
   }
 
   function drawLab () {
-    var segDeg = planetSegments[3];
-    var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + stageY ;
-    var r = -(planetPosition +segDeg);
+    var location = planetSegments[3][0];
+    var x = (Math.sin( planetPosition+location) * (stageX / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
+    var r = -(planetPosition +location);
     
     context.save();
     context.beginPath();
@@ -525,10 +519,10 @@ function drawMars() {
   }
 
   function drawRocket() {
-    /*var segDeg = planetSegments[17];
-    var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + canvasHeight ;
-    var r = -((planetPosition*57) * Math.PI/180) -(segDeg);
+    /*var location = planetSegments[17];
+    var x = (Math.sin( planetPosition+location) * (stageX / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + canvasHeight ;
+    var r = -((planetPosition*57) * Math.PI/180) -(location);
     
     context.save();
     context.beginPath();
@@ -553,10 +547,10 @@ function drawMars() {
   }
 
   function drawFlats () {
-    var segDeg = planetSegments[0];
-    var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + stageY ;
-    var r = -(planetPosition +segDeg);
+    var location = planetSegments[0][0];
+    var x = (Math.sin( planetPosition+location) * (stageX / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
+    var r = -(planetPosition +location);
     
     context.save();
     context.beginPath();
@@ -578,21 +572,26 @@ function drawMars() {
     context.restore();
   }
 
-  function drawSections () {
-    for (var arr in planetSegments) {
-        var segDeg = planetSegments[arr];
+  function drawSections () {  
+    for(var arr in planetSegments){
+      for (var i = 0; i < planetSegments[arr].length; i++) {
+        var location = planetSegments[arr][0],
+            occupied = planetSegments[arr][1];
 
-        var x = (Math.sin( planetPosition +segDeg) * (stageX / 2.25)) + canvasWidth / 2;
-        var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.25)) + stageY ;
-        context.beginPath();
-
-        context.strokeStyle = 'rgba(255, 205, 0, 0.05)';
-        context.moveTo(canvasWidth/2,stageY);
-        context.lineTo(x,y);
-
+        var x = (Math.sin( planetPosition +location) * (stageX / 2.2)) + canvasWidth / 2;
+        var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
+        context.beginPath();    
+        context.fillStyle = "rgba(255, 0, 0, 0.3)";
+        context.arc( x, y, unit*2, 0, Math.PI * 5, true );
         context.closePath();
-        context.stroke();
-      
+        context.fill(); 
+
+        context.beginPath();    
+        context.fillStyle = "rgba(255, 0, 0, 1)";
+        context.arc( x, y, unit, 0, Math.PI * 5, true );
+        context.closePath();
+        context.fill(); 
+      }
     }
     
 
