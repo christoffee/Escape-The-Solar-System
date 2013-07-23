@@ -25,6 +25,7 @@ jQuery(document).ready ( function () {
   var screenDepth = 1;
   var stageX;
   var stageY;
+var pulsate = 40;
 
   init();
 
@@ -53,6 +54,13 @@ jQuery(document).ready ( function () {
     context.rect(0, 0, canvasWidth, canvasHeight);
     context.fill();
 
+    window.oncontextmenu = function ()
+{
+    //showCustomMenu();
+    alert('hi');
+    return false;     // cancel default menu
+}
+
     document.body.appendChild( canvas );
   }
 
@@ -70,14 +78,14 @@ jQuery(document).ready ( function () {
     if (e.keyCode == 40) {
       if(screenDepth  > 0.05)
       {
-      screenDepth -= 0.05;
+      screenDepth -= 0.005;
       }
     }
     //up 38
     if (e.keyCode == 38) {
       if(screenDepth  != 1)
       {
-      screenDepth += 0.05;
+      screenDepth += 0.005;
     }
 
     }
@@ -89,9 +97,17 @@ jQuery(document).ready ( function () {
       context.clearRect(0,0,canvasWidth,canvasHeight);
       drawBackground();
       stageX = canvasWidth * screenDepth;
-      stageY = canvasHeight * screenDepth;
       unit = (stageX / 300 );
-      if(screenDepth >= 0.1){
+
+      stageY = canvasHeight * screenDepth;
+      if(stageY > (canvasHeight/2))
+      {
+      stageY = stageY;
+      }else{
+        stageY = canvasHeight/2;
+      }
+      
+      if(screenDepth >= 0.3){
         drawPlanet();
         drawResources();
         drawClouds();
@@ -102,6 +118,8 @@ jQuery(document).ready ( function () {
         drawSections();
       }else{
         drawPlanetTop();
+        drawSun();
+        drawMars();
       }
       drawDashboard();
     }
@@ -121,7 +139,7 @@ jQuery(document).ready ( function () {
       star.push(x,y,starSize,starColour);
       starsArr.push(star);
     }
-    for (i = 0; i <= 120; i++) {
+    for (i = 0; i <= 70; i++) {
       var cloud = [];
       // Get random positions for stars.
       var size = Math.floor(Math.random() * 2) + 1;
@@ -133,6 +151,35 @@ jQuery(document).ready ( function () {
       cloud.push(size,speed,direction);
       cloudsArr.push(cloud);
     }
+  }
+
+  function drawSun() {
+
+    pulsate += 0.2;
+    
+        
+        context.beginPath();    
+        context.fillStyle = "rgba(255, 255, 0, 0.3)";
+        context.arc( -stageX / 8, canvasHeight /2, pulsate, 0, Math.PI * 5, true );
+        context.closePath();
+        context.fill(); 
+
+        context.beginPath();    
+        context.fillStyle = "rgba(255, 255, 0, 0.2)";
+        context.arc( -stageX / 8, canvasHeight /2, pulsate /0.8, 0, Math.PI * 5, true );
+        context.closePath();
+        context.fill(); 
+      
+      if (pulsate >= 60) {
+        pulsate = 40;
+      }
+      context.fillStyle = 'gold';
+      context.beginPath();
+      context.arc( -stageX / 8, canvasHeight /2, 40, 0, Math.PI * 5, true );
+      context.closePath();
+      context.fill(); 
+    console.log(unit*40);
+    
   }
 
   function createPlanetSegments () {
@@ -163,7 +210,7 @@ jQuery(document).ready ( function () {
     grd.addColorStop(1,"green");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 2, canvasHeight - (screenDepth*50), stageX / 2.2, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, stageY, stageX / 2.2, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
     
@@ -172,49 +219,69 @@ jQuery(document).ready ( function () {
     grd.addColorStop(1,"rgba(102, 255, 255, 0.1)");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 2, canvasHeight - (screenDepth*50), stageX / 2, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, stageY, stageX / 2, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
     
   }
+function drawMars() {
+    var grd = context.createRadialGradient(canvasWidth/3, canvasHeight/2, canvasWidth/2.5, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(255, 0, 0, 1)");
+    grd.addColorStop(1,"brown");
+    context.beginPath();    
+    context.fillStyle = grd;
+    context.arc( canvasWidth / 3, canvasHeight/2, canvasWidth / 50, 0, Math.PI * 5, true );
+    context.closePath();
+    context.fill(); 
+    
+    grd = context.createRadialGradient(canvasWidth/3, canvasHeight/2, canvasWidth/2.2, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(255, 0, 0, 0.3)");
+    grd.addColorStop(1,"rgba(255, 0, 0, 0.1)");
+    context.beginPath();    
+    context.fillStyle = grd;
+    context.arc( canvasWidth / 3, canvasHeight/2, canvasWidth / 52, 0, Math.PI * 5, true );
+    context.closePath();
+    context.fill(); 
 
+    
+  }
   function drawPlanet() {
-    var grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/2.2, canvasWidth/2, canvasHeight, canvasWidth/2);
+    var grd = context.createRadialGradient(canvasWidth/2, stageY, stageX/2.2, canvasWidth/2, stageY, stageX/2);
     grd.addColorStop(0,"rgba(102, 255, 255, 0.8)");
     grd.addColorStop(1,"rgba(102, 255, 255, 0.5)");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 2, canvasHeight, stageX / 2, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, stageY, stageX / 2, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
-    grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/2.5, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd = context.createRadialGradient(canvasWidth/2, stageY, canvasWidth/2.5, canvasWidth/2, stageY, canvasWidth/2);
     grd.addColorStop(0,"rgba(102, 204, 102, 1)");
     grd.addColorStop(1,"green");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 2, canvasHeight, stageX / 2.2, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, stageY, stageX / 2.2, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
 
-    grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/30, canvasWidth/2, canvasHeight, canvasWidth/2.1);
+    grd = context.createRadialGradient(canvasWidth/2, stageY, canvasWidth/30, canvasWidth/2, stageY, canvasWidth/2.1);
     grd.addColorStop(0,"rgba(102, 51, 0, 1)");
     grd.addColorStop(1,"rgba(51, 25, 0, 1)");
     context.fillStyle = grd;
     context.beginPath();
-    context.arc( canvasWidth / 2, canvasHeight, stageX / 2.25, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, stageY, stageX / 2.25, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
 
 
-    grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/55, canvasWidth/2, canvasHeight, canvasWidth/12);
+    grd = context.createRadialGradient(canvasWidth/2, stageY, canvasWidth/55, canvasWidth/2, stageY, canvasWidth/12);
     grd.addColorStop(0,"yellow");
     grd.addColorStop(1,"orange");
     context.fillStyle = grd;
     context.beginPath();
-    context.arc( canvasWidth / 2, canvasHeight, stageX / 12, 0, Math.PI * 5, true );
+    context.arc( canvasWidth / 2, stageY, stageX / 12, 0, Math.PI * 5, true );
     context.closePath();
     context.fill(); 
   }
@@ -232,7 +299,7 @@ jQuery(document).ready ( function () {
         }
 
         var cloudx = Math.sin( time ) * ((stageX / 2.18) + cloudSize*unit *4) + canvasWidth / 2;
-        var cloudy = Math.cos( time ) * ((stageX / 2.18) + cloudSize*unit *4) + canvasHeight;
+        var cloudy = Math.cos( time ) * ((stageX / 2.18) + cloudSize*unit *4) + stageY;
 
         var cloud2x = Math.sin( time - 2 ) * 5 + cloudx;
         var cloud2y = Math.cos( time - 2 ) * 5 + cloudy;
@@ -267,7 +334,7 @@ jQuery(document).ready ( function () {
   function drawResources () {
 
     var x = ((Math.sin( planetPosition ) * (stageX / 8)) + canvasWidth / 2) ;
-    var y = ((Math.cos( planetPosition ) * (stageX / 8)) + canvasHeight);
+    var y = ((Math.cos( planetPosition ) * (stageX / 8)) + stageY);
     var r = -(planetPosition*57) * Math.PI/180;
     //gold
 
@@ -309,7 +376,7 @@ jQuery(document).ready ( function () {
     
     //coal
     x = ((Math.sin( planetPosition +0.5 ) * (stageX / 4)) + canvasWidth / 2) ;
-    y = ((Math.cos( planetPosition +0.5) * (stageX / 4)) + canvasHeight);
+    y = ((Math.cos( planetPosition +0.5) * (stageX / 4)) + stageY);
     
     context.save();
     context.beginPath();
@@ -349,7 +416,7 @@ jQuery(document).ready ( function () {
 
     //jewles
     x = ((Math.sin( planetPosition -1.5 ) * (stageX / 6)) + canvasWidth / 2) ;
-    y = ((Math.cos( planetPosition -1.5) * (stageX / 6)) + canvasHeight);
+    y = ((Math.cos( planetPosition -1.5) * (stageX / 6)) + stageY);
     
     context.save();
     context.beginPath();
@@ -392,7 +459,7 @@ jQuery(document).ready ( function () {
   function drawFactory () {
     var segDeg = planetSegments[4];
     var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + canvasHeight ;
+    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + stageY ;
     var r = -(planetPosition +segDeg);
     
     context.save();
@@ -424,7 +491,7 @@ jQuery(document).ready ( function () {
   function drawLab () {
     var segDeg = planetSegments[3];
     var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + canvasHeight ;
+    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + stageY ;
     var r = -(planetPosition +segDeg);
     
     context.save();
@@ -488,7 +555,7 @@ jQuery(document).ready ( function () {
   function drawFlats () {
     var segDeg = planetSegments[0];
     var x = (Math.sin( planetPosition+segDeg) * (stageX / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + canvasHeight ;
+    var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.2)) + stageY ;
     var r = -(planetPosition +segDeg);
     
     context.save();
@@ -515,12 +582,12 @@ jQuery(document).ready ( function () {
     for (var arr in planetSegments) {
         var segDeg = planetSegments[arr];
 
-        var x = (Math.sin( planetPosition +segDeg) * (canvasWidth / 2.25)) + canvasWidth / 2;
-        var y = (Math.cos( planetPosition+segDeg) * (canvasWidth / 2.25)) + canvasHeight ;
+        var x = (Math.sin( planetPosition +segDeg) * (stageX / 2.25)) + canvasWidth / 2;
+        var y = (Math.cos( planetPosition+segDeg) * (stageX / 2.25)) + stageY ;
         context.beginPath();
 
         context.strokeStyle = 'rgba(255, 205, 0, 0.05)';
-        context.moveTo(canvasWidth/2,canvasHeight);
+        context.moveTo(canvasWidth/2,stageY);
         context.lineTo(x,y);
 
         context.closePath();
@@ -575,6 +642,7 @@ jQuery(document).ready ( function () {
     generation++;
       //alert('generation' + generation);
     }
+   
   }
 
   
