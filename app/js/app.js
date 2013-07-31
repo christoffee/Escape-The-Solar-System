@@ -26,6 +26,7 @@ jQuery(document).ready ( function () {
   var generation =0;
   var food =0;
   var screenDepth = 1;
+  var drawmenu = false;
 
   init();
 
@@ -48,7 +49,7 @@ jQuery(document).ready ( function () {
 
     window.addEventListener("mousedown", mouseClick, true);
     window.addEventListener( "keydown", doKeyDown, true);
-    //canvas.addEventListener( "mousemove", mouseOver, true);
+    canvas.addEventListener( "mousemove", mouseOver, true);
 
     context = canvas.getContext( '2d' );
     context.fillStyle = "black";
@@ -58,20 +59,42 @@ jQuery(document).ready ( function () {
     document.body.appendChild( canvas );
   }
 
-  /*function mouseOver (e) {
+  function mouseOver (e) {
     console.log(e);
-    var location = planetSegments[4][0];
+    var location = planetSegments[8][0];
     var x = (Math.sin( planetPosition +location) * (stageX / 2.2)) + canvasWidth / 2;
     var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
-    if(e.x > x && e.x < x*5 && e.y < y*5 && e.y > y ){
-        context.fillStyle = 'white';
-        context.beginPath();
-        context.rect(x, y, 300, 300);
-        context.closePath();
-        context.fill();
-    }
-  }*/
+      
 
+    if(e.x > (x-(unit*2)) && e.x < (x+(unit*2)) && e.y < (y +(unit*2)) && e.y > (y-(unit*2)) ){
+                drawmenu = true;
+    }else{
+      drawmenu = false;
+    }
+  }
+  function drawMenu (draw, info) {
+    var location = planetSegments[8][0];
+    var x = (Math.sin( planetPosition +location) * (stageX / 2.2)) + canvasWidth / 2;
+    var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
+      var r = -(planetPosition + location);
+    if(drawmenu){
+      context.fillStyle = 'white';
+      context.beginPath();
+      context.rect(x, y, 20, 30);
+      context.closePath();
+      context.fill();
+    }
+
+      context.save();
+        context.beginPath();
+        context.translate(x,y);
+        context.rotate(r);    
+        context.fillStyle = "rgba(250, 0, 0, 0.5)";
+        context.rect(-(unit*2),-(unit*2),unit*4,unit*4);
+        context.closePath();
+        context.fill(); 
+        context.restore();
+  }
   function doKeyDown (e) {
     //left
     if(e.keyCode == 37){
@@ -120,7 +143,6 @@ jQuery(document).ready ( function () {
         drawWorkforce();
         drawLab();
         drawFactory();
-        drawRocket();
         drawClouds();
         drawSections();
       }else{
@@ -128,6 +150,7 @@ jQuery(document).ready ( function () {
         drawSun();
         drawMars();
       }
+      drawMenu();
       drawDashboard();
     }
   }
@@ -417,34 +440,6 @@ function drawMars() {
     context.restore();
   }
 
-  function drawRocket() {
-    /*var location = planetSegments[17];
-    var x = (Math.sin( planetPosition+location) * (stageX / 2.2)) + canvasWidth / 2;
-    var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + canvasHeight ;
-    var r = -((planetPosition*57) * Math.PI/180) -(location);
-    
-    context.save();
-    context.beginPath();
-    context.translate(x,y);
-    context.rotate(r);
-    //body
-    context.rect(0,3,5,20);
-    //wings
-    context.moveTo(5,0);
-    context.lineTo(5,10);
-    context.lineTo(15,0);
-    context.moveTo(0,0);
-    context.lineTo(0,10);
-    context.lineTo(-10,0);
-    //head
-    context.moveTo(7,25);
-    context.lineTo(-2,25);
-    context.lineTo(2,30);
-    context.fillStyle="orange";
-    context.fill();
-    context.restore();*/
-  }
-
   function drawWorkforce () {
     for(var arr in citizenArray){
       var position = citizenArray[arr][0],
@@ -488,17 +483,27 @@ function drawMars() {
 
         var x = (Math.sin( planetPosition +location) * (stageX / 2.2)) + canvasWidth / 2;
         var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
-        context.beginPath();    
-        context.fillStyle = "rgba(255, 0, 0, 0.3)";
-        context.arc( x, y, unit*2, 0, Math.PI * 5, true );
-        context.closePath();
-        context.fill(); 
+      var r = -(planetPosition +location);
 
-        context.beginPath();    
-        context.fillStyle = "rgba(255, 0, 0, 1)";
-        context.arc( x, y, unit, 0, Math.PI * 5, true );
+        context.save();
+        context.beginPath();
+        context.translate(x,y);
+        context.rotate(r);    
+        context.fillStyle = "rgba(50, 0, 60, 0.3)";
+        context.rect(-(unit*2),-(unit*2),unit*4,(unit*4));
         context.closePath();
         context.fill(); 
+        context.restore();
+
+        context.save();
+        context.beginPath();
+        context.translate(x,y);
+        context.rotate(r);    
+        context.fillStyle = "rgba(50, 0, 60, 1)";
+        context.rect(-unit,-unit,unit*2,(unit*2));
+        context.closePath();
+        context.fill(); 
+        context.restore();
       }
     }
     
