@@ -11,7 +11,7 @@ var gameData = {
 				generation: 0,
 				food: 0,
 				inspiration: 0,
-				locations : [0,1,2]
+				locations : [[8,0,1.5,6]]
 			},
 			production: {
 				resourcesGathered: 0,
@@ -29,7 +29,7 @@ var gameData = {
 				generation: 0,
 				food: 0,
 				inspiration: 0,
-				locations : [0,1,2]
+				locations : [[8,0,1.5,6]]
 			},
 			production: {
 				resourcesGathered: 0,
@@ -46,3 +46,4 @@ var gameData = {
 }
 
 console.log(gameData);
+debugger;

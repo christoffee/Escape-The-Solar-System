@@ -8,10 +8,7 @@ jQuery(document).ready ( function () {
           window.setTimeout(callback, 1000 / 60);
         };
   })();
-
-  //planetarrays - NAME , INNERGRAD , OUTERGRAD ,GRADRADIUS , RADIUS 
-  var earth = [['sky',"rgba(102, 255, 255, 0.8)","rgba(102, 255, 255, 0.5)",2.2, 2],['grass',"rgba(102, 204, 102, 1)","green",2.25, 2.2],['mud',"rgba(102, 51, 0, 1)","rgba(51, 25, 0, 1)",30, 2.25],['core',"yellow","orange",55, 12]];
-  var planetRes = [[ 'coal', 'black', 8 , 3 , [ 2 , 4 , 1 ] , [ 1.5 , 1.5 , 1 ]  , [ 3 , 3 , 0.5 ]  , [ 1 , 2 , 1 ]  ],[ 'gold', 'yellow', 5 , 6 , [ 2 , 4 , 0.5 ] , [ 1.5 , 1 , 1 ]  , [ 3 , 5 , 0.5 ]  , [ 1 , 2 , 1 ]  ]];
+  
   //workforce array - POSITION , X , Y , WIDTH , HIEGHT
   var citizenArray = [[8,0,1.5,6]];
   var canvas, context, toggle, starSize,canvasHeight,canvasWidth,stageX,stageY;
@@ -27,6 +24,7 @@ jQuery(document).ready ( function () {
   var food =0;
   var screenDepth = 1;
   var drawmenu = false;
+  var targetPlanet = "earth";
 
   init();
 
@@ -138,7 +136,7 @@ jQuery(document).ready ( function () {
       }
       
       if(screenDepth >= 0.3){
-        drawPlanet(context,earth);
+        drawPlanet(context);
         drawResources();
         drawWorkforce();
         drawLab();
@@ -277,14 +275,15 @@ function drawMars() {
     
   }
 
-  function drawPlanet(context,planetArr) {
+  function drawPlanet(context) {
+    var planetArr = planets[targetPlanet].build;
     for(var arr in planetArr){
       var layerName = planetArr[arr][0],
           gradColour1 = planetArr[arr][1],
           gradColour2 = planetArr[arr][2],
           gradRadius = planetArr[arr][3],
           layerRadius = planetArr[arr][4];
-      var grd = context.createRadialGradient(canvasWidth/2, stageY, stageX/gradRadius, canvasWidth/2, stageY, stageX/2);
+      var grd = context.createRadialGradient(canvasWidth/2, stageY, stageX/gradRadius, canvasWidth/2, stageY, gradRadius);
       grd.addColorStop(0,gradColour1);
       grd.addColorStop(1,gradColour2);
 
@@ -342,7 +341,7 @@ function drawMars() {
   }
 
   function drawResources () {
-
+    var planetRes = planets[targetPlanet].resources;
     //coalResources array - NAME , COLOUR , position , depth , [ X , Y , SIZE ]
     for(var arr in planetRes){
       var resName = planetRes[arr][0],
@@ -441,6 +440,7 @@ function drawMars() {
   }
 
   function drawWorkforce () {
+    var citizenArray = gameData.planet[targetPlanet].workforce.locations;
     for(var arr in citizenArray){
       var position = citizenArray[arr][0],
           buildingPosition = citizenArray[arr][1],
@@ -469,6 +469,7 @@ function drawMars() {
         var newCititzens = [position, ranPos, 1.5, ranHeight];
         citizenArray.push(newCititzens);
         food = 0;
+        console.log(gameData.planet[targetPlanet].workforce.locations);
       }
 
     }
