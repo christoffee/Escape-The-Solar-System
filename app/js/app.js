@@ -14,15 +14,17 @@ jQuery(document).ready ( function () {
   var starsArr = [];
   var planetSegments = [];
   var buildingLocations = [];
-  var pulsate = 40;
+  var pulsate;
   var planetPosition = 0;
   var gameTime = 12345678;
   var unit =0;
   var generation =0;
   var food =0;
-  var screenDepth = 1;
+  var screenDepth;
   var drawmenu = false;
-  var targetPlanet = "mars";
+  var alpha = 1;
+  var alpha2 = 0.8;
+  var targetPlanet = "saturn";
 
   init();
 
@@ -40,9 +42,10 @@ jQuery(document).ready ( function () {
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
 
-    
-    unit = canvasWidth / 300;
+    screenDepth = planets[targetPlanet].size;
 
+    unit = canvasWidth / 300;
+    pulsate = canvasWidth/4.5;
     window.addEventListener("mousedown", mouseClick, true);
     window.addEventListener( "keydown", doKeyDown, true);
     canvas.addEventListener( "mousemove", mouseOver, true);
@@ -80,16 +83,6 @@ jQuery(document).ready ( function () {
       context.closePath();
       context.fill();
     }
-
-      context.save();
-        context.beginPath();
-        context.translate(x,y);
-        context.rotate(r);    
-        context.fillStyle = "rgba(250, 0, 0, 0.5)";
-        context.rect(-(unit*2),-(unit*2),unit*4,unit*4);
-        context.closePath();
-        context.fill(); 
-        context.restore();
   }
   function doKeyDown (e) {
     //left
@@ -110,7 +103,7 @@ jQuery(document).ready ( function () {
     }
     //up 38
     if (e.keyCode == 38) {
-      if(screenDepth  != 1)
+      if(screenDepth  < 1.2)
       {
       screenDepth += 0.05;
     }
@@ -122,6 +115,7 @@ jQuery(document).ready ( function () {
     if(context){
       context.clearRect(0,0,canvasWidth,canvasHeight);
       drawBackground();
+
       stageX = canvasWidth * screenDepth;
       unit = (stageX / 300 );
 
@@ -134,16 +128,19 @@ jQuery(document).ready ( function () {
       }
       
       if(screenDepth >= 0.3){
+
         drawPlanet(context);
-        drawResources();
         drawWorkforce();
         drawLab();
         drawFactory();
         drawSections();
       }else{
-        drawPlanetTop();
         drawSun();
+        drawSolarSystem();
+        /*drawEarth();
         drawMars();
+        drawJupiter();
+        drawSaturn();*/
       }
       drawMenu();
       drawDashboard();
@@ -180,29 +177,36 @@ jQuery(document).ready ( function () {
 
   function drawSun() {
 
+    
+    var colour = "rgba(255, 255, 0, " + alpha +")";
+    var colour2 = "rgba(255, 255, 0, " + alpha2 +")";
     pulsate += 0.2;
     
-        
         context.beginPath();    
-        context.fillStyle = "rgba(255, 255, 0, 0.3)";
-        context.arc( -stageX / 8, canvasHeight /2, pulsate, 0, Math.PI * 5, true );
+        context.fillStyle = colour;
+        context.arc( -(canvasHeight/4), canvasHeight /2, pulsate, 0, Math.PI * 5, true );
         context.closePath();
         context.fill(); 
 
         context.beginPath();    
-        context.fillStyle = "rgba(255, 255, 0, 0.2)";
-        context.arc( -stageX / 8, canvasHeight /2, pulsate /0.8, 0, Math.PI * 5, true );
+        context.fillStyle = colour2;
+        context.arc( -(canvasHeight/4), canvasHeight /2, pulsate /0.9, 0, Math.PI * 5, true );
         context.closePath();
         context.fill(); 
       
-      if (pulsate >= 60) {
-        pulsate = 40;
+      if (pulsate >= canvasWidth/3.5) {
+        pulsate = canvasWidth/4.5;
+        alpha = 0.8;
+        alpha2 = 0.8;
       }
       context.fillStyle = 'gold';
       context.beginPath();
-      context.arc( -stageX / 8, canvasHeight /2, 40, 0, Math.PI * 5, true );
+      context.arc( -(canvasHeight/4) , canvasHeight /2, canvasWidth/4, 0, Math.PI * 5, true );
       context.closePath();
       context.fill(); 
+
+      alpha  -= 0.00219;
+      alpha2 -= 0.0029;
     
   }
 
@@ -229,48 +233,163 @@ jQuery(document).ready ( function () {
       }
     }
   }
-  function drawPlanetTop() {
-    var grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/2.5, canvasWidth/2, canvasHeight, canvasWidth/2);
-    grd.addColorStop(0,"rgba(102, 204, 102, 1)");
+
+  function drawSolarSystem () {
+    //draw target planet last
+    for(var obj in planets){
+      if(obj != targetPlanet) {
+        var grd = context.createRadialGradient(canvasWidth/planets[obj].distance, stageY, stageX / planets[obj].build[0][3], canvasWidth/2, canvasHeight, canvasWidth/2);
+        grd.addColorStop(0,planets[obj].build[0][1]);
+        grd.addColorStop(1,planets[obj].build[0][2]);
+        context.beginPath();    
+        context.fillStyle = grd;
+        context.arc( canvasWidth / planets[obj].distance , canvasHeight/2, canvasWidth / (2 / planets[obj].size), 0, Math.PI * 5, true );
+        context.closePath();
+        context.fill(); 
+
+        grd = context.createRadialGradient(canvasWidth/planets[obj].distance, stageY, stageX/planets[obj].build[0][3], canvasWidth/2, canvasHeight, canvasWidth/2);
+        grd.addColorStop(0,planets[obj].build[1][1]);
+        grd.addColorStop(1,planets[obj].build[1][2]);
+        context.beginPath();    
+        context.fillStyle = grd;
+        context.arc( canvasWidth / planets[obj].distance , canvasHeight/2, canvasWidth / (2.3 / planets[obj].size), 0, Math.PI * 5, true );
+        context.closePath();
+        context.fill(); 
+      }
+      //draw target planet
+      grd = context.createRadialGradient(canvasWidth/planets[targetPlanet].distance, stageY, stageX / planets[targetPlanet].build[0][3], canvasWidth/2, canvasHeight, canvasWidth/2);
+      grd.addColorStop(0,planets[targetPlanet].build[0][1]);
+      grd.addColorStop(1,planets[targetPlanet].build[0][2]);
+      context.beginPath();    
+      context.fillStyle = grd;
+      context.arc( canvasWidth / planets[targetPlanet].distance , stageY, stageX / 2.8, 0, Math.PI * 5, true );
+      context.closePath();
+      context.fill(); 
+
+      grd = context.createRadialGradient(canvasWidth/planets[targetPlanet].distance, stageY, stageX/planets[targetPlanet].build[0][3], canvasWidth/2, canvasHeight, canvasWidth/2);
+      grd.addColorStop(0,planets[targetPlanet].build[1][1]);
+      grd.addColorStop(1,planets[targetPlanet].build[1][2]);
+      context.beginPath();    
+      context.fillStyle = grd;
+      context.arc( canvasWidth / planets[targetPlanet].distance , stageY, stageX / planets[targetPlanet].build[1][3], 0, Math.PI * 5, true );
+      context.closePath();
+      context.fill(); 
+    }
+    
+  }
+  /*function drawEarth() {
+    var grd = context.createRadialGradient(canvasWidth/2.2, stageY, stageX/planets[targetPlanet].build[2][3,] canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(10, 255, 100, 1)");
     grd.addColorStop(1,"green");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 2, stageY, stageX / 2.2, 0, Math.PI * 5, true );
+    if(targetPlanet == "earth"){
+      context.arc( canvasWidth / 2.2 , stageY, stageX / 2.3, 0, Math.PI * 5, true );
+    }else{
+      context.arc( canvasWidth / 2.2 , canvasHeight/2, canvasWidth / 120, 0, Math.PI * 5, true );
+    }
     context.closePath();
     context.fill(); 
     
-    grd = context.createRadialGradient(canvasWidth/2, canvasHeight, canvasWidth/2.2, canvasWidth/2, canvasHeight, canvasWidth/2);
-    grd.addColorStop(0,"rgba(102, 255, 255, 0.3)");
+    grd = context.createRadialGradient(canvasWidth/2.3, stageY, stageX/2.2, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(102, 255, 255, 0.5)");
     grd.addColorStop(1,"rgba(102, 255, 255, 0.1)");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 2, stageY, stageX / 2, 0, Math.PI * 5, true );
+    if(targetPlanet == "earth"){
+      context.arc( canvasWidth/2.2 , stageY, stageX / 2.2, 0, Math.PI * 5, true );
+    }else{
+      context.arc( canvasWidth/2.2 , canvasHeight/2, canvasWidth / 135, 0, Math.PI * 5, true );
+    }
     context.closePath();
     context.fill(); 
 
     
   }
 function drawMars() {
-    var grd = context.createRadialGradient(canvasWidth/3, canvasHeight/2, canvasWidth/2.5, canvasWidth/2, canvasHeight, canvasWidth/2);
+    var grd = context.createRadialGradient(canvasWidth/2.5, canvasHeight/2, canvasWidth/2.5, canvasWidth/2, canvasHeight, canvasWidth/2);
     grd.addColorStop(0,"rgba(255, 0, 0, 1)");
     grd.addColorStop(1,"brown");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 3, canvasHeight/2, canvasWidth / 50, 0, Math.PI * 5, true );
+    if(targetPlanet == "mars"){
+      context.arc( canvasWidth / 2.5 , stageY, stageX / 2.8, 0, Math.PI * 5, true );
+    }else{
+      context.arc( canvasWidth / 2.5 , canvasHeight/2, canvasWidth / 120, 0, Math.PI * 5, true );
+    }
+    context.closePath();
+    context.fill(); 
+    
+    grd = context.createRadialGradient(canvasWidth/2.5, canvasHeight/2, canvasWidth/2.2, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(255, 100, 0, 0.8)");
+    grd.addColorStop(1,"rgba(255, 100, 0, 0.5)");
+    context.beginPath();    
+    context.fillStyle = grd;
+    if(targetPlanet == "mars"){
+      context.arc( canvasWidth / 2.5 , stageY, stageX / 2.5, 0, Math.PI * 5, true );
+    }else{
+      context.arc( canvasWidth / 2.5 , canvasHeight/2, canvasWidth / 130, 0, Math.PI * 5, true );
+    }
+    context.closePath();
+    context.fill(); 
+  }
+
+
+  function drawJupiter() {
+    var grd = context.createRadialGradient(canvasWidth/3, canvasHeight/2, canvasWidth/2.5, canvasWidth/2, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(255, 100, 0, 1)");
+    grd.addColorStop(1,"orange");
+    context.beginPath();    
+    context.fillStyle = grd;
+    if(targetPlanet == "jupiter"){
+      context.arc( canvasWidth / 1.8 , stageY, stageX / 2.4, 0, Math.PI * 5, true );
+    }else{
+      context.arc( canvasWidth / 1.8 , canvasHeight/2, canvasWidth / 50, 0, Math.PI * 5, true );
+    }
     context.closePath();
     context.fill(); 
     
     grd = context.createRadialGradient(canvasWidth/3, canvasHeight/2, canvasWidth/2.2, canvasWidth/2, canvasHeight, canvasWidth/2);
-    grd.addColorStop(0,"rgba(255, 0, 0, 0.3)");
-    grd.addColorStop(1,"rgba(255, 0, 0, 0.1)");
+    grd.addColorStop(0,"rgba(255, 100, 0, 0.8)");
+    grd.addColorStop(1,"rgba(255, 100, 0, 0.5)");
     context.beginPath();    
     context.fillStyle = grd;
-    context.arc( canvasWidth / 3, canvasHeight/2, canvasWidth / 52, 0, Math.PI * 5, true );
+    if(targetPlanet == "jupiter"){
+      context.arc( canvasWidth / 1.8 , stageY, stageX / 2.2, 0, Math.PI * 5, true );
+    }else{
+      context.arc( canvasWidth / 1.8 , canvasHeight/2, canvasWidth / 52, 0, Math.PI * 5, true );
+    }
     context.closePath();
     context.fill(); 
-
-    
   }
+
+  function drawSaturn() {
+    var grd = context.createRadialGradient(canvasWidth/1.6, canvasHeight/2, canvasWidth/2.5, canvasWidth/1.6, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(255, 100, 0, 1)");
+    grd.addColorStop(1,"grey");
+    context.beginPath();    
+    context.fillStyle = grd;
+    if(targetPlanet == "saturn"){
+      context.arc( canvasWidth / 1.6 , stageY, stageX / 2.4, 0, Math.PI * 5, true );
+    }else{
+      context.arc( canvasWidth / 1.6 , canvasHeight/2, canvasWidth / 50, 0, Math.PI * 5, true );
+    }
+    context.closePath();
+    context.fill(); 
+    
+    grd = context.createRadialGradient(canvasWidth/1.6, canvasHeight/2, canvasWidth/2.2, canvasWidth/1.6, canvasHeight, canvasWidth/2);
+    grd.addColorStop(0,"rgba(191, 193, 194, 0.2)");
+    grd.addColorStop(1,"rgba(191, 193, 194, 0.5)");
+    context.beginPath();    
+    context.fillStyle = grd;
+    if(targetPlanet == "saturn"){
+      context.arc( canvasWidth / 1.6 , stageY, stageX / 1.8, 0, Math.PI * 5, true );
+    }else{
+      context.arc( canvasWidth / 1.6 , canvasHeight/2, canvasWidth / 52, 0, Math.PI * 5, true );
+    }
+    context.closePath();
+    context.fill(); 
+  }*/
 
   function drawPlanet(context) {
     var planetArr = planets[targetPlanet].build;
@@ -292,11 +411,14 @@ function drawMars() {
     }
     if(planets[targetPlanet].atmosphere.exists){
 
-        drawClouds();
+        drawClouds(planets[targetPlanet].atmosphere.colour,planets[targetPlanet].atmosphere.size);
     }
+
+    drawResources(planets[targetPlanet].productionResources);
+    drawResources(planets[targetPlanet].luxuryResources);
   }
 
-  function drawClouds(){
+  function drawClouds(colour,size){
     for(var arr in cloudsArr){
       for (var i = 0; i < cloudsArr[arr].length; i++) {
         var cloudSize = cloudsArr[arr][0],
@@ -317,22 +439,21 @@ function drawMars() {
         var cloud3x = Math.sin( time + unit/2 ) * unit + cloudx;
         var cloud3y = Math.cos( time + unit/2 ) * unit + cloudy;
 
-        context.beginPath();
         context.fillStyle = "rgba(255, 255, 255, 0.3)";
+
+        context.beginPath();
         context.arc( cloudx, cloudy, cloudSize*unit, 0, Math.PI * 5, true );
         context.closePath();
 
         context.fill();
 
         context.beginPath();
-        context.fillStyle = "rgba(255, 255, 255, 0.2)";
         context.arc( cloud2x, cloud2y, cloudSize*unit / 2, 0, Math.PI * 5, true );
         context.closePath();
 
         context.fill();
 
         context.beginPath();
-        context.fillStyle = "rgba(255, 255, 255, 0.4)";
         context.arc( cloud3x, cloud3y, cloudSize*unit /1.5, 0, Math.PI * 5, true );
         context.closePath();
 
@@ -341,33 +462,30 @@ function drawMars() {
     }
   }
 
-  function drawResources () {
-    var planetRes = planets[targetPlanet].resources;
-    //coalResources array - NAME , COLOUR , position , depth , [ X , Y , SIZE ]
-    for(var arr in planetRes){
-      var resName = planetRes[arr][0],
-          colour = planetRes[arr][1],
-          position = planetRes[arr][2],
-          depth = planetRes[arr][3];
+  function drawResources (resource) {
+    
+    var name = resource.name;
+    var colour = resource.colour;
+    var location = resource.location;
+    var depth = resource.depth;
 
-      //check that the referenced property exists at each level of the array.
-      if(planetSegments[position] && planetSegments[position][0]) {
-        var location = planetSegments[position][0];
-      }
+    for(var arr in resource.build){
+
+     // check that the referenced property exists at each level of the array.
+      //if(resource.build[arr] && resource.build[arr][0]) {
+       // var location = resource.build[arr][0];
+     // }
       var r = -(planetPosition + location);
       var x = ((Math.sin( planetPosition + location ) * (stageX / depth)) + canvasWidth / 2) ;
       var y = ((Math.cos( planetPosition + location ) * (stageX / depth)) + stageY);
-      for (var i = 4; i < planetRes[arr].length; i++) {
           context.save();
           context.beginPath();
           context.translate(x,y);
           context.rotate(r);
-          context.rect((unit*planetRes[arr][i][0]),(unit*planetRes[arr][i][1]),(unit*planetRes[arr][i][2]),(unit*planetRes[arr][i][2]));
+          context.rect((unit*resource.build[arr][0]),(unit*resource.build[arr][1]),(unit*resource.build[arr][2]),(unit*resource.build[arr][2]));
           context.fillStyle=colour;
           context.fill();
           context.restore();
-      }
-
     }
 
   }
@@ -519,18 +637,30 @@ function drawMars() {
     context.fillRect(0,0,canvasWidth,50);
     context.fill();
 
-    //timer
+    //generation text
     context.beginPath();
     context.fillStyle="#fff";
     context.fillRect(canvasWidth / 2 - 75,5,250,40);
     context.fill();
 
-    //generation
     context.beginPath();
     context.fillStyle="#000";
     context.font="30px Arial";
     var gameText = "Generation: " + generation;
     context.fillText(gameText,canvasWidth / 2 - 45,45)
+    context.fill();
+
+    //planet text
+    context.beginPath();
+    context.fillStyle="#fff";
+    context.fillRect(canvasWidth / 4 - 75,5,250,40);
+    context.fill();
+
+    context.beginPath();
+    context.fillStyle="#000";
+    context.font="30px Arial";
+    var planetText = "target: " + targetPlanet;
+    context.fillText(planetText,canvasWidth / 4 - 45,45)
     context.fill();
 
     //next turn
