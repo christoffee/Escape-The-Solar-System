@@ -9,8 +9,6 @@ jQuery(document).ready ( function () {
         };
   })();
   
-  //workforce array - POSITION , X , Y , WIDTH , HIEGHT
-  var citizenArray = [[8,0,1.5,6]];
   var canvas, context, toggle, starSize,canvasHeight,canvasWidth,stageX,stageY;
   var cloudsArr = [];
   var starsArr = [];
@@ -24,7 +22,7 @@ jQuery(document).ready ( function () {
   var food =0;
   var screenDepth = 1;
   var drawmenu = false;
-  var targetPlanet = "earth";
+  var targetPlanet = "mars";
 
   init();
 
@@ -141,7 +139,6 @@ jQuery(document).ready ( function () {
         drawWorkforce();
         drawLab();
         drawFactory();
-        drawClouds();
         drawSections();
       }else{
         drawPlanetTop();
@@ -283,7 +280,7 @@ function drawMars() {
           gradColour2 = planetArr[arr][2],
           gradRadius = planetArr[arr][3],
           layerRadius = planetArr[arr][4];
-      var grd = context.createRadialGradient(canvasWidth/2, stageY, stageX/gradRadius, canvasWidth/2, stageY, gradRadius);
+      var grd = context.createRadialGradient(canvasWidth/2, stageY, stageX/gradRadius, canvasWidth/2, stageY, stageX/(gradRadius*0.1));
       grd.addColorStop(0,gradColour1);
       grd.addColorStop(1,gradColour2);
 
@@ -292,6 +289,10 @@ function drawMars() {
       context.arc( canvasWidth / 2, stageY, stageX / layerRadius, 0, Math.PI * 5, true );
       context.fill();
       context.closePath();
+    }
+    if(planets[targetPlanet].atmosphere.exists){
+
+        drawClouds();
     }
   }
 

@@ -4,8 +4,8 @@ var planets = {
 	            build: [
 	            	['sky',"rgba(102, 0, 0, 0.8)","rgba(102, 102, 0, 0.5)",2.2, 2],
 	            	['grass',"rgba(255,102,51, 1)","brown",2.25, 2.2],
-	            	['mud',"rgba(102, 255, 0, 1)","rgba(51, 0, 0, 1)",30, 2.25],
-	            	['core',"brown","orange",55, 12]
+	            	['mud',"rgba(102, 80, 0, 1)","rgba(51, 0, 0, 1)",30, 2.25],
+	            	['core',"brown","orange",55, 7]
 	            ],  
 	            resources: [
             		[ 'coal', 'black', 8 , 3 , 
@@ -20,7 +20,12 @@ var planets = {
             			[ 3 , 5 , 0.5 ], 
             			[ 1 , 2 , 1 ]
             		]
-            	]
+            	],
+                  atmosphere: {
+                        exists: false,
+                        size:"1", 
+                        colour:"white"
+                  }
 	        }, 
 	      earth:{ 
 	            name: 'Earth',  
@@ -45,6 +50,7 @@ var planets = {
             		]
             	],
             	atmosphere: {
+                        exists: true,
             		size:"1", 
             		colour:"white"
             	}

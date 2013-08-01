@@ -46,4 +46,3 @@ var gameData = {
 }
 
 console.log(gameData);
-debugger;
