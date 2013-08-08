@@ -52,12 +52,12 @@ var gameData = {
 			production: {
 				resourcesGathered: 0,
 				luxResources: 0,
-				locations : [0,1,2]
+				locations : []
 			},
 			research: {
 				level: 0,
 				rate: 0,
-				locations : [0,1,2]
+				locations : []
 			}
 		},
 		saturn: {
@@ -70,12 +70,12 @@ var gameData = {
 			production: {
 				resourcesGathered: 0,
 				luxResources: 0,
-				locations : [0,1,2]
+				locations : []
 			},
 			research: {
 				level: 0,
 				rate: 0,
-				locations : [0,1,2]
+				locations : []
 			}
 		}
 	}
