@@ -83,7 +83,7 @@ jQuery(document).ready ( function () {
     //1 - mars
     case 49:
       if(screenDepth <= 0.3){
-        targetPlanet = "Mars";
+        targetPlanet = "Venus";
       }
       break;
     //2 - earth
@@ -139,7 +139,6 @@ jQuery(document).ready ( function () {
       }
         
       drawHoverMenu();
-      drawClickMenu();
 
       drawDashboard();
     }
@@ -281,6 +280,12 @@ jQuery(document).ready ( function () {
   }
 
   function drawPlanet(context) {
+
+    //clear segments
+    for (arr in planetSegments) {
+      planetSegments[arr][1] = false;
+    };
+
     var targetPlanetLowercase = targetPlanet.toLowerCase();
     var planetArr = planets[targetPlanetLowercase].build;
     for(var arr in planetArr){
@@ -298,14 +303,40 @@ jQuery(document).ready ( function () {
       context.arc( canvasWidth / 2, stageY, stageX / layerRadius, 0, Math.PI * 5, true );
       context.fill();
       context.closePath();
-    }
-    if(planets[targetPlanetLowercase].atmosphere.exists){
 
+      if(!gameData.planet[targetPlanetLowercase].terrafomed){
+      var layerName = planetArr[1][0],
+          gradColour1 = planetArr[1][1],
+          gradColour2 = planetArr[1][2],
+          gradRadius = planetArr[1][3],
+          layerRadius = planetArr[1][4];
+        var grd = context.createRadialGradient(canvasWidth/2, stageY, stageX/gradRadius, canvasWidth/2, stageY, stageX/(gradRadius*0.1));
+        grd.addColorStop(0,gradColour1);
+        grd.addColorStop(1,gradColour2);
+
+        context.beginPath();
+        context.fillStyle = grd;
+        context.arc( canvasWidth / 2, stageY, stageX / layerRadius, 0, Math.PI * 5, true );
+        context.fill();
+        context.closePath();
+
+        context.save();
+        context.beginPath();
+        context.fillStyle=planetArr[3][2];
+        context.font= unit + "em Arial";
+        context.textAlign = 'center';
+        context.translate(canvasWidth / 2,stageY);
+        context.fillText("Needs Terraforming",0,0);
+        context.fill();
+        context.restore();
+      }else{
+        drawResources(planets[targetPlanetLowercase].productionResources);
+        drawResources(planets[targetPlanetLowercase].luxuryResources);
         drawClouds(planets[targetPlanetLowercase].atmosphere.colour,planets[targetPlanetLowercase].atmosphere.size);
+      }
     }
 
-    drawResources(planets[targetPlanetLowercase].productionResources);
-    drawResources(planets[targetPlanetLowercase].luxuryResources);
+    
   }
 
   function drawClouds(colour,size){
@@ -455,9 +486,9 @@ jQuery(document).ready ( function () {
       var position = citizenArray[arr][0],
           buildingPosition = citizenArray[arr][1],
           buildingWidth = citizenArray[arr][2],
-          buildingHeight = citizenArray[arr][3];
+          buildingHeight = citizenArray[arr][3],
+          location = planetSegments[  citizenArray[arr][0]  ][0];
 
-      var location = position;
       var x = (Math.sin( planetPosition+location) * (stageX / 2.2)) + canvasWidth / 2;
       var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
       var r = -(planetPosition +location);
@@ -473,11 +504,14 @@ jQuery(document).ready ( function () {
       context.fill();
       context.restore();
 
+      planetSegments[position][1] = true;
       if(food > 1){
-        var ranPos = (Math.random()*10+ 1).toFixed(8);
-        var ranHeight = (Math.random()*10+1).toFixed(8);
-        var newCititzens = [position, ranPos, 1.5, ranHeight];
-        citizenArray.push(newCititzens);
+        for (var i = 0; i < gameData.planet[targetPlanetLowercase].workforce.locations[0].length; i++) { 
+          var ranPos = (Math.random()*10+ 1).toFixed(8);
+          var ranHeight = (Math.random()*10+1).toFixed(8);
+          var newCititzens = [gameData.planet[targetPlanetLowercase].workforce.locations[i][0], ranPos, 1.5, ranHeight];
+          citizenArray.push(newCititzens);
+        };
         food = 0;
       }
 
@@ -486,37 +520,42 @@ jQuery(document).ready ( function () {
   }
 
   function drawSections () {  
+    var targetPlanetLowercase = targetPlanet.toLowerCase();
+    if(gameData.planet[targetPlanetLowercase].terrafomed){
     for(var arr in planetSegments){
       for (var i = 0; i < planetSegments[arr].length; i++) {
         var location = planetSegments[arr][0],
             occupied = planetSegments[arr][1];
 
-        var x = (Math.sin( planetPosition +location) * (stageX / 2.2)) + canvasWidth / 2;
-        var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
-      var r = -(planetPosition +location);
+        if(!occupied){
+          var x = (Math.sin( planetPosition +location) * (stageX / 2.2)) + canvasWidth / 2;
+          var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
+          var r = -(planetPosition +location);
 
-        context.save();
-        context.beginPath();
-        context.translate(x,y);
-        context.rotate(r);    
-        context.fillStyle = "rgba(50, 0, 60, 0.3)";
-        context.rect(-(unit*2),-(unit*2),unit*4,(unit*4));
-        context.closePath();
-        context.fill(); 
-        context.restore();
+          context.save();
+          context.beginPath();
+          context.translate(x,y);
+          context.rotate(r);    
+          context.fillStyle = "rgba(50, 0, 60, 0.3)";
+          context.rect(-(unit*2),-(unit*2),unit*4,(unit*4));
+          context.closePath();
+          context.fill(); 
+          context.restore();
 
-        context.save();
-        context.beginPath();
-        context.translate(x,y);
-        context.rotate(r);    
-        context.fillStyle = "rgba(50, 0, 60, 1)";
-        context.rect(-unit,-unit,unit*2,(unit*2));
-        context.closePath();
-        context.fill(); 
-        context.restore();
+          context.save();
+          context.beginPath();
+          context.translate(x,y);
+          context.rotate(r);    
+          context.fillStyle = "rgba(50, 0, 60, 1)";
+          context.rect(-unit,-unit,unit*2,(unit*2));
+          context.closePath();
+          context.fill(); 
+          context.restore();
+        }
+        
       }
     }
-
+}
   }
 
   function drawDashboard () {
@@ -555,17 +594,19 @@ jQuery(document).ready ( function () {
     //next turn
     context.save();
     context.beginPath();
-    //context.translate(canvasWidth/2,canvasHeight-90);
-    context.rect(canvasWidth-(unit*39),canvasHeight-(unit*15),unit*36,unit*12);
+    context.rect(canvasWidth-(canvasWidth/6),canvasHeight -(canvasHeight/10),canvasWidth/7,canvasHeight/15);
     context.fillStyle="red";
     context.fill();
     context.restore();
 
+    context.save();
     context.beginPath();
     context.fillStyle="white";
-    context.font="30px Arial";
-    context.fillText("Next Gen",canvasWidth-(unit*36),canvasHeight-(unit*6))
+    context.font="2em Arial";
+    context.translate(canvasWidth-(canvasWidth/6),canvasHeight -(canvasHeight/10));
+    context.fillText("Next Gen",(canvasWidth/50),(canvasHeight/22));
     context.fill();
+    context.restore();
   }
 
   
