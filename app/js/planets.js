@@ -1,6 +1,6 @@
 var planets = {
             venus:{ 
-                  name: 'Mars',  
+                  name: 'Venus',  
                   distance: 2.8,
                   build: [
                         ['sky',"rgba(102, 0, 10, 0.8)","rgba(102, 102, 10, 0.5)",2.2, 2],

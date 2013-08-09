@@ -1,4 +1,4 @@
-jQuery(document).ready ( function () {
+
   // shim layer with setTimeout fallback
   window.requestAnimFrame = (function(){
     return  window.requestAnimationFrame       ||
@@ -25,10 +25,9 @@ jQuery(document).ready ( function () {
   var alpha2 = 0.8;
   var targetPlanet = "Earth";
   var drawmenu = false;
-
+jQuery(document).ready ( function () {
   init();
-
-
+});
   (function animloop(){
     requestAnimFrame(animloop);
     render();
@@ -131,16 +130,17 @@ jQuery(document).ready ( function () {
 
         drawPlanet(context);
         drawWorkforce();
-        drawLab();
-        drawFactory();
+        //drawLab();
+       // drawFactory();
         drawSections();
       }else{
         drawSun();
         drawSolarSystem();
       }
         
-      drawMenu();
-      
+      drawHoverMenu();
+      drawClickMenu();
+
       drawDashboard();
     }
   }
@@ -380,7 +380,7 @@ jQuery(document).ready ( function () {
 
   }
 
-  function drawFactory () {
+  /*function drawFactory () {
     var location = planetSegments[4][0];
     var x = (Math.sin( planetPosition+location) * (stageX / 2.2)) + canvasWidth / 2;
     var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
@@ -446,7 +446,7 @@ jQuery(document).ready ( function () {
     context.fillStyle="blue";
     context.fill();
     context.restore();
-  }
+  }*/
 
   function drawWorkforce () {
     var targetPlanetLowercase = targetPlanet.toLowerCase();
@@ -568,68 +568,6 @@ jQuery(document).ready ( function () {
     context.fill();
   }
 
-  function drawMenu () {
-    for(var arr in planetSegments){
-      for (var i = 0; i < planetSegments[arr].length; i++) {
-        var location = planetSegments[arr][0],
-            occupied = planetSegments[arr][1];
-
-        var x = (Math.sin( planetPosition +location) * (stageX / 2.2)) + canvasWidth / 2;
-        var y = (Math.cos( planetPosition+location) * (stageX / 2.2)) + stageY ;
-
-          context.save();
-          context.beginPath();
-          context.moveTo(x - (unit*4),y - (unit*4));
-          context.lineTo(x + (unit*4),y - (unit*4));
-          context.lineTo(x + (unit*4),y + (unit*4));
-          context.lineTo(x + (unit*4),y + (unit*4));
-          context.lineTo(x - (unit*4),y - (unit*4));
-          context.closePath();
-          context.fill(); 
-          context.restore()
-
-
-        if(currentMousePos.y > y - (unit*4) && currentMousePos.y < y  && currentMousePos.x > x - (unit*4) && currentMousePos.x < x ){
-         /* context.save();
-          context.beginPath();
-          context.translate(currentMousePos.x,currentMousePos.y);
-          context.fillStyle = "rgba(150, 155, 160, 1)";
-          context.rect(0, 0,100,40);
-          context.closePath();
-          context.fill(); 
-          context.restore();*/
-
-          drawmenu = true
-          console.log("location",arr);
-        }else{
-          drawmenu = false;
-        }
-      }
-    }
-    if(drawmenu){
-      debugger; 
-      context.save();
-          context.beginPath();
-          context.translate(currentMousePos.x,currentMousePos.y);
-          context.fillStyle = "rgba(150, 155, 160, 1)";
-          context.rect(0, 0,100,40);
-          context.closePath();
-          context.fill(); 
-          context.restore();
-    }
-  }
-
-  function mouseClick (e) {
-    //alert(e.y);
-    if(e.x >= canvasWidth-(unit*39) && e.x <= (canvasWidth-(unit*39)) + unit*36  && e.y >= canvasHeight-(unit*15) && e.y <= (canvasHeight-(unit*15))+ unit*12){
-      
-    generation++;
-    food+= 0.2;
-      //alert('generation' + generation);
-    }
-   
-  }
-
   
 
-});
+  

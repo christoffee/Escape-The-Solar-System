@@ -75,7 +75,7 @@ var gameData = {
 			research: {
 				level: 0,
 				rate: 0,
-				locations : []
+				locations : [	]
 			}
 		}
 	}
