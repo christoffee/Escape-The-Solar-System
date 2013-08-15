@@ -106,7 +106,6 @@ jQuery(document).ready ( function () {
       break;
     default:
     }
-    console.log(screenDepth);
 
   }
 
@@ -342,7 +341,7 @@ jQuery(document).ready ( function () {
   function drawClouds(colour,size){
     for(var arr in cloudsArr){
       for (var i = 0; i < cloudsArr[arr].length; i++) {
-        var cloudSize = cloudsArr[arr][0],
+        var cloudSize = size,
             cloudSpeed = cloudsArr[arr][1],
             antiClockwise = cloudsArr[arr][2];
         var time = (gameTime * cloudSpeed) + planetPosition;
@@ -360,7 +359,7 @@ jQuery(document).ready ( function () {
         var cloud3x = Math.sin( time + unit/2 ) * unit + cloudx;
         var cloud3y = Math.cos( time + unit/2 ) * unit + cloudy;
 
-        context.fillStyle = "rgba(255, 255, 255, 0.3)";
+        context.fillStyle = colour;
 
         context.beginPath();
         context.arc( cloudx, cloudy, cloudSize*unit, 0, Math.PI * 5, true );
@@ -558,56 +557,7 @@ jQuery(document).ready ( function () {
 }
   }
 
-  function drawDashboard () {
-    //dashboard
-    context.beginPath();
-    context.fillStyle="#333";
-    context.fillRect(0,0,canvasWidth,50);
-    context.fill();
-
-    //generation text
-    context.beginPath();
-    context.fillStyle="#fff";
-    context.fillRect(canvasWidth / 2 - 75,5,250,40);
-    context.fill();
-
-    context.beginPath();
-    context.fillStyle="#000";
-    context.font="30px Arial";
-    var gameText = "Generation: " + generation;
-    context.fillText(gameText,canvasWidth / 2 - 45,45)
-    context.fill();
-
-    //planet text
-    context.beginPath();
-    context.fillStyle="#fff";
-    context.fillRect(canvasWidth / 4 - 75,5,250,40);
-    context.fill();
-
-    context.beginPath();
-    context.fillStyle="#000";
-    context.font="30px Arial";
-    var planetText = targetPlanet;
-    context.fillText(planetText,canvasWidth / 4 - 45,45)
-    context.fill();
-
-    //next turn
-    context.save();
-    context.beginPath();
-    context.rect(canvasWidth-(canvasWidth/6),canvasHeight -(canvasHeight/10),canvasWidth/7,canvasHeight/15);
-    context.fillStyle="red";
-    context.fill();
-    context.restore();
-
-    context.save();
-    context.beginPath();
-    context.fillStyle="white";
-    context.font="2em Arial";
-    context.translate(canvasWidth-(canvasWidth/6),canvasHeight -(canvasHeight/10));
-    context.fillText("Next Gen",(canvasWidth/50),(canvasHeight/22));
-    context.fill();
-    context.restore();
-  }
+  
 
   
 

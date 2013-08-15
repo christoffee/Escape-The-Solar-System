@@ -1,9 +1,10 @@
-
   var currentMousePos = { x: -1, y: -1 };
   jQuery(document).mousemove(function(event) {
       currentMousePos.x = event.pageX;
       currentMousePos.y = event.pageY;
   });
+
+  var gameElement;
 
   function drawHoverMenu () {
     var targetPlanetLowercase = targetPlanet.toLowerCase();
@@ -35,9 +36,10 @@
             context.fillText(locationText,currentMousePos.x+ (unit*2),currentMousePos.y + (unit*4))
             context.fill();
 
+            gameElement = "Location " + arr;
+
             context.fillStyle="rgba(50, 255, 60, 1)";
             context.font="1em Arial";
-            var locationText;
             if(occupied){
               locationText = "Flats";
             }else{
@@ -46,8 +48,11 @@
             context.fillText(locationText,currentMousePos.x+ (unit*2),currentMousePos.y + (unit*8))
             context.fill();
 
+
             break;
 
+          }else{
+            gameElement = '';
           }
 
         }
@@ -60,7 +65,6 @@
           var size = (10000 * planets[obj].size);
 
           if(currentMousePos.y > y - (unit*size) && currentMousePos.y < y + (unit*size)  && currentMousePos.x > x +((unit*size)*0.5)  && currentMousePos.x < x + ((unit*size)*2.5) ){
-            console.log(planets[obj].name);
      
            context.save();
             context.beginPath();
@@ -114,14 +118,28 @@
             context.fill();
             context.restore();
 
+            gameElement = planets[obj].name;
+
             break;
 
+          }else{
+            gameElement = '';
           }
       }
     }
   }
 
   function mouseClick (e) {
+    //if(screenDepth <= 0.020000000000000087 ){
+      if(gameElement){
+          targetPlanet = gameElement;
+      }
+    //}else{
+     // if(gameElement){
+      //    targetLocation = gameElement;
+      //}
+    //}
+
     context.rect(canvasWidth-(canvasWidth/6),canvasHeight-(unit*15),canvasWidth/7,canvasHeight/15);
     //alert(e.y);
     if(e.x >= canvasWidth-(canvasWidth/6) && e.x <= (canvasWidth-(canvasWidth/6)) + canvasWidth/7  && e.y >= canvasHeight -(canvasHeight/10) && e.y <= (canvasHeight -(canvasHeight/10))+ canvasHeight/15){

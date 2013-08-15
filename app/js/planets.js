@@ -1,4 +1,41 @@
 var planets = {
+            mercury:{ 
+                  name: 'Mercury',  
+                  distance: 3,
+                  build: [
+                        ['sky',"rgba(102, 104, 100, 0.8)","rgba(102, 102, 100, 0.5)",2.2, 2],
+                        ['grass',"rgba(105,102,151, 1)","brown",2.25, 2.2],
+                        ['mud',"rgba(102, 180, 100, 1)","rgba(151, 111, 110, 1)",30, 2.25],
+                        ['core',"brown","orange",55, 7]
+                  ],  
+                  productionResources:{
+                        name: "uranium",
+                        colour: "rgba(0, 255, 0, 1)",
+                        location: 8,
+                        depth: 3,
+                        build: [[ 2 , 4 , 1 ], 
+                              [ 1.5 , 1.5 , 1 ], 
+                              [ 3 , 3 , 0.5 ], 
+                              [ 1 , 2 , 1 ]]
+                  },  
+                  luxuryResources:{
+                        name: "gold",
+                        colour: "yellow",
+                        location: 5,
+                        depth: 6,
+                        build: [[ 2 , 4 , 0.5 ], 
+                              [ 1.5 , 1 , 1 ], 
+                              [ 3 , 5 , 0.5 ], 
+                              [ 1 , 2 , 1 ]
+                        ]
+                  },
+                  atmosphere: {
+                        exists: false,
+                        size:"1", 
+                        colour:"rgba(255, 100, 100, 0.3)"
+                  },
+                  size:0.015
+              },
             venus:{ 
                   name: 'Venus',  
                   distance: 2.8,
@@ -32,7 +69,7 @@ var planets = {
                   atmosphere: {
                         exists: false,
                         size:"1", 
-                        colour:"rgba(255, 255, 255, 0.3)"
+                        colour:"rgba(255, 100, 100, 0.3)"
                   },
                   size:0.02
               },
@@ -106,7 +143,7 @@ var planets = {
             	atmosphere: {
                         exists: true,
             		size:"1", 
-            		colour:"white"
+            		colour:"rgba(255, 255, 255, 0.3)"
             	},
                   size:0.02
 	        }, 

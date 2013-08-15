@@ -6,6 +6,25 @@ var gameData = {
 		targetPlanet: "Earth",
 	},
 	planet: {
+		mercury: {
+			workforce: {
+				generation: 0,
+				food: 0,
+				inspiration: 0,
+				locations : []
+			},
+			production: {
+				resourcesGathered: 0,
+				luxResources: 0,
+				locations : []
+			},
+			research: {
+				level: 0,
+				rate: 0,
+				locations : [	]
+			},
+			terrafomed: false
+		},
 		venus: {
 			workforce: {
 				generation: 0,
@@ -23,7 +42,7 @@ var gameData = {
 				rate: 0,
 				locations : []
 			},
-			terrafomed: false
+			terrafomed: true
 		},
 		mars: {
 			workforce: {
@@ -49,7 +68,7 @@ var gameData = {
 				generation: 0,
 				food: 0,
 				inspiration: 0,
-				locations : [[5,0,1.5,6],[3,0,1.5,6],[1,0,1.5,6]]
+				locations : [[5,0,1.5,6],[3,0,1.5,6],[1,0,1.5,6],[4,0,1.5,6]]
 			},
 			production: {
 				resourcesGathered: 0,
@@ -80,7 +99,7 @@ var gameData = {
 				rate: 0,
 				locations : []
 			},
-			terrafomed: false
+			terrafomed: true
 		},
 		saturn: {
 			workforce: {
