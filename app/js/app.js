@@ -9,25 +9,31 @@
         };
   })();
   
-  var canvas, context, toggle, starSize,canvasHeight,canvasWidth,stageX,stageY;
-  var cloudsArr = [];
-  var starsArr = [];
-  var planetSegments = [];
-  var buildingLocations = [];
-  var pulsate;
-  var planetPosition = 0;
-  var gameTime = 12345678;
-  var unit =0;
-  var generation =0;
-  var food =0;
-  var screenDepth;
-  var alpha = 1;
-  var alpha2 = 0.8;
-  var targetPlanet = "Earth";
-  var drawmenu = false;
-jQuery(document).ready ( function () {
-  init();
-});
+  var canvas, context, toggle, starSize,canvasHeight,canvasWidth,stageX,stageY,
+    cloudsArr = [],
+    starsArr = [],
+    planetSegments = [],
+    buildingLocations = [],
+    pulsate,
+    planetPosition = 0,
+    gameTime = 12345678,
+    unit =0,
+    generation =0,
+    food =0,
+    screenDepth,
+    alpha = 1,
+    alpha2 = 0.8,
+    targetPlanet = "Earth",
+    drawMenu = false,
+    zoomIn = false;
+  
+  var gameElement;
+  var locationElement;
+
+  jQuery(document).ready ( function () {
+    init();
+  });
+  
   (function animloop(){
     requestAnimFrame(animloop);
     render();
@@ -64,22 +70,22 @@ jQuery(document).ready ( function () {
     case 37:
       planetPosition += 0.05;
       break;
-    //Up arrow
-    case 38:
-      if(screenDepth  < 1.2){
-        screenDepth += 0.05;
-      }
-      break;
     //right arrow
     case 39:
       planetPosition -= 0.05;
       break;
+    //Up arrow
+    /*case 38:
+      if(screenDepth  < 1.2){
+        screenDepth += 0.05;
+      }
+      break;*/
     //down arrow
-    case 40:
+    /*case 40:
       if(screenDepth  > 0.05){
       screenDepth -= 0.05;
       }
-      break;
+      break;*/
     //1 - mars
     case 49:
       if(screenDepth <= 0.3){
@@ -111,35 +117,41 @@ jQuery(document).ready ( function () {
 
   function render() {
     if(context){
+
       context.clearRect(0,0,canvasWidth,canvasHeight);
+
       drawBackground();
 
       stageX = canvasWidth * screenDepth;
       unit = (stageX / 300 );
-
       stageY = canvasHeight * screenDepth;
-      if(stageY > (canvasHeight/2))
-      {
-      stageY = stageY;
+
+      if(stageY > (canvasHeight/2)){
+        stageY = stageY;
       }else{
         stageY = canvasHeight/2;
       }
-      
-      if(screenDepth >= 0.3){
 
+      if(screenDepth  < 1.2 && zoomIn){
+        screenDepth += 0.05;
+      }else if(screenDepth  > 0.05 && !zoomIn){
+        screenDepth -= 0.05;
+      }
+
+      if(zoomIn){
         drawPlanet(context);
         drawWorkforce();
         //drawLab();
-       // drawFactory();
+        // drawFactory();
         drawSections();
+        drawBuildMenu();
+        drawDashboard();
       }else{
         drawSun();
         drawSolarSystem();
       }
         
       drawHoverMenu();
-
-      drawDashboard();
     }
   }
   
@@ -180,13 +192,13 @@ jQuery(document).ready ( function () {
     
         context.beginPath();    
         context.fillStyle = colour;
-        context.arc( -(canvasHeight/4), canvasHeight /2, pulsate, 0, Math.PI * 5, true );
+        context.arc( -(canvasHeight/4), canvasHeight /2, pulsate, 0, Math.PI * 2, true );
         context.closePath();
         context.fill(); 
 
         context.beginPath();    
         context.fillStyle = colour2;
-        context.arc( -(canvasHeight/4), canvasHeight /2, pulsate /0.9, 0, Math.PI * 5, true );
+        context.arc( -(canvasHeight/4), canvasHeight /2, pulsate /0.9, 0, Math.PI * 2, true );
         context.closePath();
         context.fill(); 
       
@@ -197,7 +209,7 @@ jQuery(document).ready ( function () {
       }
       context.fillStyle = 'gold';
       context.beginPath();
-      context.arc( -(canvasHeight/4) , canvasHeight /2, canvasWidth/4, 0, Math.PI * 5, true );
+      context.arc( -(canvasHeight/4) , canvasHeight /2, canvasWidth/4, 0, Math.PI * 2, true );
       context.closePath();
       context.fill(); 
 
@@ -207,12 +219,18 @@ jQuery(document).ready ( function () {
   }
 
   function createPlanetSegments () {
-    
+
+    /*
+     * This function creates the segements 
+     * of the planet.
+     */
     for (var i = 0; i <= 17; i++) {
-      var radians = (i / 90 * Math.PI) * 10;
-      var planetSegment =[];
+
+      var radians = (i / 90 * Math.PI) * 10,
+      planetSegment =[];
+
       planetSegment.push(radians, false);
-      planetSegments.push(planetSegment);
+      planetSegments.push(planetSegment); //locations pushed planetSegment array to planetSegments array
 
     };
   }
@@ -241,7 +259,7 @@ jQuery(document).ready ( function () {
         grd.addColorStop(1,planets[obj].build[0][2]);
         context.beginPath();    
         context.fillStyle = grd;
-        context.arc( canvasWidth / planets[obj].distance , canvasHeight/2, canvasWidth / (2 / planets[obj].size), 0, Math.PI * 5, true );
+        context.arc( canvasWidth / planets[obj].distance , canvasHeight/2, canvasWidth / (2 / planets[obj].size), 0, Math.PI * 2, true );
         context.closePath();
         context.fill(); 
 
@@ -250,7 +268,7 @@ jQuery(document).ready ( function () {
         grd.addColorStop(1,planets[obj].build[1][2]);
         context.beginPath();    
         context.fillStyle = grd;
-        context.arc( canvasWidth / planets[obj].distance , canvasHeight/2, canvasWidth / (2.3 / planets[obj].size), 0, Math.PI * 5, true );
+        context.arc( canvasWidth / planets[obj].distance , canvasHeight/2, canvasWidth / (2.3 / planets[obj].size), 0, Math.PI * 2, true );
         context.closePath();
         context.fill(); 
       }
@@ -261,7 +279,7 @@ jQuery(document).ready ( function () {
       grd.addColorStop(1,planets[targetPlanetLowercase].build[0][2]);
       context.beginPath();    
       context.fillStyle = grd;
-      context.arc( canvasWidth / planets[targetPlanetLowercase].distance , stageY, stageX / planets[targetPlanetLowercase].build[0][3], 0, Math.PI * 5, true );
+      context.arc( canvasWidth / planets[targetPlanetLowercase].distance , stageY, stageX / planets[targetPlanetLowercase].build[0][3], 0, Math.PI * 2, true );
       context.closePath();
       context.fill(); 
 
@@ -270,9 +288,11 @@ jQuery(document).ready ( function () {
       grd.addColorStop(1,planets[targetPlanetLowercase].build[1][2]);
       context.beginPath();    
       context.fillStyle = grd;
-      context.arc( canvasWidth / planets[targetPlanetLowercase].distance , stageY, stageX / planets[targetPlanetLowercase].build[1][3], 0, Math.PI * 5, true );
+      context.arc( canvasWidth / planets[targetPlanetLowercase].distance , stageY, stageX / planets[targetPlanetLowercase].build[1][3], 0, Math.PI * 2, true );
       context.closePath();
       context.fill(); 
+
+
 
     }
     
@@ -299,7 +319,7 @@ jQuery(document).ready ( function () {
 
       context.beginPath();
       context.fillStyle = grd;
-      context.arc( canvasWidth / 2, stageY, stageX / layerRadius, 0, Math.PI * 5, true );
+      context.arc( canvasWidth / 2, stageY, stageX / layerRadius, 0, Math.PI * 2, true );
       context.fill();
       context.closePath();
 
@@ -315,7 +335,7 @@ jQuery(document).ready ( function () {
 
         context.beginPath();
         context.fillStyle = grd;
-        context.arc( canvasWidth / 2, stageY, stageX / layerRadius, 0, Math.PI * 5, true );
+        context.arc( canvasWidth / 2, stageY, stageX / layerRadius, 0, Math.PI * 2, true );
         context.fill();
         context.closePath();
 
@@ -343,8 +363,8 @@ jQuery(document).ready ( function () {
       for (var i = 0; i < cloudsArr[arr].length; i++) {
         var cloudSize = size,
             cloudSpeed = cloudsArr[arr][1],
-            antiClockwise = cloudsArr[arr][2];
-        var time = (gameTime * cloudSpeed) + planetPosition;
+            antiClockwise = cloudsArr[arr][2],
+            time = (gameTime * cloudSpeed) + planetPosition;
         
         if(antiClockwise){
         	time = -time;
@@ -353,28 +373,28 @@ jQuery(document).ready ( function () {
         var cloudx = Math.sin( time ) * ((stageX / 2.12) + (cloudSize * (unit*3) ) )+ canvasWidth / 2;
         var cloudy = Math.cos( time ) * ((stageX / 2.12) + (cloudSize  * (unit*3) ) )+ stageY;
 
-        var cloud2x = Math.sin( time - unit/2 ) * unit + cloudx;
-        var cloud2y = Math.cos( time - unit/2 ) * unit + cloudy;
+        var cloud2x = Math.sin( time - unit/4 ) * unit + cloudx;
+        var cloud2y = Math.cos( time - unit/4 ) * unit + cloudy;
 
-        var cloud3x = Math.sin( time + unit/2 ) * unit + cloudx;
-        var cloud3y = Math.cos( time + unit/2 ) * unit + cloudy;
+        var cloud3x = Math.sin( time + unit/4 ) * unit + cloudx;
+        var cloud3y = Math.cos( time + unit/4 ) * unit + cloudy;
 
         context.fillStyle = colour;
 
         context.beginPath();
-        context.arc( cloudx, cloudy, cloudSize*unit, 0, Math.PI * 5, true );
+        context.arc( cloudx, cloudy, cloudSize*unit, 0, Math.PI * 2, true );
         context.closePath();
 
         context.fill();
 
         context.beginPath();
-        context.arc( cloud2x, cloud2y, cloudSize*unit / 2, 0, Math.PI * 5, true );
+        context.arc( cloud2x, cloud2y, cloudSize*unit / 2, 0, Math.PI * 2, true );
         context.closePath();
 
         context.fill();
 
         context.beginPath();
-        context.arc( cloud3x, cloud3y, cloudSize*unit /1.5, 0, Math.PI * 5, true );
+        context.arc( cloud3x, cloud3y, cloudSize*unit /1.5, 0, Math.PI * 2, true );
         context.closePath();
 
         context.fill();

@@ -1,7 +1,7 @@
 function drawDashboard () {
     //dashboard
     context.beginPath();
-    context.fillStyle="#333";
+    context.fillStyle="rgba(50, 0, 60, 0.3)";
     context.fillRect(0,0,canvasWidth,50);
     context.fill();
 
@@ -35,7 +35,7 @@ function drawDashboard () {
     context.save();
     context.beginPath();
     context.rect(canvasWidth-(canvasWidth/6),canvasHeight -(canvasHeight/10),canvasWidth/7,canvasHeight/15);
-    context.fillStyle="red";
+    context.fillStyle="rgba(250, 0, 60, 0.3)";
     context.fill();
     context.restore();
 
@@ -45,6 +45,23 @@ function drawDashboard () {
     context.font="2em Arial";
     context.translate(canvasWidth-(canvasWidth/6),canvasHeight -(canvasHeight/10));
     context.fillText("Next Gen",(canvasWidth/50),(canvasHeight/22));
+    context.fill();
+    context.restore();
+
+    //exit planet
+    context.save();
+    context.beginPath();
+    context.rect(canvasWidth/30,canvasHeight -(canvasHeight/10),canvasWidth/15,canvasHeight/15);
+    context.fillStyle="rgba(0, 250, 60, 0.3)";
+    context.fill();
+    context.restore();
+
+    context.save();
+    context.beginPath();
+    context.fillStyle="white";
+    context.font="2em Arial";
+    context.translate(canvasWidth/30,canvasHeight -(canvasHeight/10));
+    context.fillText("Exit",(canvasWidth/100),(canvasHeight/22));
     context.fill();
     context.restore();
   }

@@ -157,6 +157,25 @@ var gameData = {
 				locations : [	]
 			},
 			terrafomed: false
+		},
+		pluto: {
+			workforce: {
+				generation: 0,
+				food: 0,
+				inspiration: 0,
+				locations : []
+			},
+			production: {
+				resourcesGathered: 0,
+				luxResources: 0,
+				locations : []
+			},
+			research: {
+				level: 0,
+				rate: 0,
+				locations : [	]
+			},
+			terrafomed: true
 		}
 	}
 }

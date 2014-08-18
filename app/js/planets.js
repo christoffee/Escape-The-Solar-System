@@ -294,7 +294,45 @@ var planets = {
                         colour:"rgba(255, 255, 255, 0.3)"
                   },
                   size:0.027
+              }, 
+             pluto: { 
+                  name: 'Pluto',
+                  distance: 1.2,  
+                  build: [
+                        ['sky',"rgba(111, 250, 255    , 0.8)","rgba(211, 130, 294, 0.5)",2.2, 2],
+                        ['grass',"rgba(142, 118, 255, 1)","rgba(50, 257, 255, 1)",2.25, 2.2],
+                        ['mud',"rgba(53, 38, 110, 1)","rgba(70, 77, 74, 1)",30, 2.25],
+                        ['core',"rgba(191, 261, 57,1)","orange",55, 20]
+                  ],    
+                  productionResources:{
+                        name: "uranium+",
+                        colour: "rgba(100, 255, 0, 1)",
+                        location: 8,
+                        depth: 3,
+                        build: [[ 2 , 4 , 1 ], 
+                              [ 1.5 , 1.5 , 1 ], 
+                              [ 3 , 3 , 0.5 ], 
+                              [ 1 , 2 , 1 ]]
+                  },  
+                  luxuryResources:{
+                        name: "platinum",
+                        colour: "grey",
+                        location: 5,
+                        depth: 6,
+                        build: [[ 2 , 4 , 0.5 ], 
+                              [ 1.5 , 1 , 1 ], 
+                              [ 3 , 5 , 0.5 ], 
+                              [ 1 , 2 , 1 ]
+                        ]
+                  },
+                  atmosphere: {
+                        exists: true,
+                        size:"1", 
+                        colour:"rgba(0, 255, 0, 0.3)"
+                  },
+                  size:0.03
               }
+
 	    
 
 };
